@@ -44,13 +44,40 @@ class TestUnit(TestCase):
         from warlord.unit import calculate_damage
         self.assertEqual(calculate_damage(self.unit, self.unit), 1)
 
+    def test_default_speed(self):
+        self.assertEquals(self.unit.speed, 1)
+
     def test_attack_count_vs_unit(self):
         from warlord.unit import calculate_attack_count
         self.assertEqual(calculate_attack_count(self.unit, self.unit), 1)
 
+    def test_attack_count_vs_other_unit(self):
+        from warlord.unit import Unit, calculate_attack_count
+        unitOther = Unit()
+        self.unit.speed = 2
+        self.assertEqual(calculate_attack_count(self.unit, unitOther), 2)
+
     def test_combat(self):
         from warlord.unit import Unit, combat
         unitOther = Unit()
+        unitOther.health = 99
+        self.unit.health = 99
         combat(self.unit, unitOther)
-        self.assertEqual(self.unit.health, -1)
-        self.assertEqual(unitOther.health, -1)
+        self.assertEqual(self.unit.health, 98)
+        self.assertEqual(unitOther.health, 98)
+
+    def test_combat_with_dead_units_does_nothing(self):
+        from warlord.unit import Unit, combat
+        unitOther = Unit()
+        combat(self.unit, unitOther)
+        self.assertEqual(self.unit.health, 0)
+        self.assertEqual(unitOther.health, 0)
+
+    def test_combat_where_unit_dies_stops(self):
+        from warlord.unit import Unit, combat
+        unitOther = Unit()
+        unitOther.health = 1
+        self.unit.health = 99
+        combat(self.unit, unitOther)
+        self.assertEqual(self.unit.health, 99)
+        self.assertEqual(unitOther.health, 0)
