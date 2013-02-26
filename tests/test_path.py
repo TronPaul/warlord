@@ -50,8 +50,7 @@ class TestPath(TestCase):
     def test_path_with_impassible_square(self):
         from warlord.path import path, ImpassibleTileError
         tile = Mock()
-        tile.up = Mock()
-        tile.up.impassible = True
+        tile.up.return_value.impassible = True
         self.assertRaises(ImpassibleTileError, path, self.unit, ('U',), tile)
 
     def test_check_path_up(self):
@@ -90,15 +89,14 @@ class TestPath(TestCase):
         from warlord.path import check_path, BadDirectionError
         self.assertRaises(BadDirectionError, check_path, self.unit, ('X',), self.tile)
 
-    def test_multi_direction_path(self):
+    def test_check_multi_direction_path(self):
         from warlord.path import check_path
         self.assertTrue(check_path(self.unit,
             ('U', 'U', 'L', 'L', 'D', 'R', 'D', 'L', 'U'), self.tile))
 
-    def test_path_with_impassible_square(self):
+    def test_check_path_with_impassible_square(self):
         from warlord.path import check_path, ImpassibleTileError
         tile = Mock()
         tile.up = Mock()
         tile.up.impassible = True
         self.assertTrue(not check_path(self.unit, ('U',), tile))
-
