@@ -47,3 +47,10 @@ class TestUnit(TestCase):
     def test_attack_count_vs_unit(self):
         from warlord.unit import calculate_attack_count
         self.assertEqual(calculate_attack_count(self.unit, self.unit), 1)
+
+    def test_combat(self):
+        from warlord.unit import Unit, combat
+        unitOther = Unit()
+        combat(self.unit, unitOther)
+        self.assertEqual(self.unit.health, -1)
+        self.assertEqual(unitOther.health, -1)
