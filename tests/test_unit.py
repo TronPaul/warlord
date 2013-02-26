@@ -102,3 +102,23 @@ class TestUnit(TestCase):
         tile = Mock()
         tile.impassible.return_value = True
         self.assertTrue(not self.unit.is_passible(tile))
+
+    def test_default_experience(self):
+        self.assertEquals(self.unit.experience, 0)
+
+    def test_default_level(self):
+        self.assertEquals(self.unit.level, 1)
+
+    def test_add_experience(self):
+        self.unit.add_experience(1)
+        self.assertEquals(self.unit.experience, 1)
+
+    def test_add_experience_with_level_up(self):
+        self.unit.add_experience(100)
+        self.assertEquals(self.unit.experience, 0)
+        self.assertEquals(self.unit.level, 2)
+
+    def test_add_experience_with_level_up_and_extra(self):
+        self.unit.add_experience(101)
+        self.assertEquals(self.unit.experience, 1)
+        self.assertEquals(self.unit.level, 2)

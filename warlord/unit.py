@@ -4,6 +4,8 @@ class ItemNotInInventoryError(LookupError):
 class Unit(object):
     def __init__(self):
         self.location = (0, 0)
+        self.level = 1
+        self.experience = 0
         self.health = 0
         self.speed = 0
         self.strength = 0
@@ -23,6 +25,12 @@ class Unit(object):
 
     def is_passible(self, tile):
         return not tile.impassible
+
+    def add_experience(self, experience):
+        self.experience += experience
+        if self.experience >= 100:
+            self.level = (self.experience / 100) + 1
+            self.experience = self.experience % 100
 
 def calculate_damage(unitA, unitB):
     return max(unitA.strength, 0)
