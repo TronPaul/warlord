@@ -98,10 +98,9 @@ class TestUnit(TestCase):
         item = Mock()
         self.assertRaises(ItemNotInInventoryError, self.unit.equip_item, item)
 
-    def test_is_passible_with_impassible_tile(self):
+    def test_is_passible_raises_not_implemented(self):
         tile = Mock()
-        tile.impassible.return_value = True
-        self.assertTrue(not self.unit.is_passible(tile))
+        self.assertRaises(NotImplementedError, self.unit.is_passible, tile)
 
     def test_default_experience(self):
         self.assertEquals(self.unit.experience, 0)

@@ -24,7 +24,7 @@ class Unit(object):
         self.equipped_item = item
 
     def is_passible(self, tile):
-        return not tile.impassible
+        raise NotImplementedError
 
     def add_experience(self, experience):
         self.experience += experience
