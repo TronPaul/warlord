@@ -26,6 +26,9 @@ class Unit(object):
     def is_passible(self, tile):
         raise NotImplementedError
 
+    def is_visible(self, tile):
+        raise NotImplementedError
+
     def add_experience(self, experience):
         self.experience += experience
         if self.experience >= 100:

@@ -102,6 +102,10 @@ class TestUnit(TestCase):
         tile = Mock()
         self.assertRaises(NotImplementedError, self.unit.is_passible, tile)
 
+    def test_is_visible_raises_not_implemented(self):
+        tile = Mock()
+        self.assertRaises(NotImplementedError, self.unit.is_visible, tile)
+
     def test_default_experience(self):
         self.assertEquals(self.unit.experience, 0)
 

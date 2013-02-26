@@ -4,15 +4,15 @@ class BadDirectionError(ValueError):
 class ImpassibleTileError(ValueError):
     pass
 
-def check_step(unit, step, tile):
+def check_step(unit, step, tile, ignore_visibility=True):
     if step == 'U':
-        return unit.is_passible(tile.up)
+        return unit.is_passible(tile.up) or not unit.is_visible(tile.up)
     elif step == 'D':
-        return unit.is_passible(tile.down)
+        return unit.is_passible(tile.down) or not unit.is_visible(tile.down)
     elif step == 'R':
-        return unit.is_passible(tile.right)
+        return unit.is_passible(tile.right) or not unit.is_visible(tile.right)
     elif step == 'L':
-        return unit.is_passible(tile.left)
+        return unit.is_passible(tile.left) or not unit.is_visible(tile.left)
     else:
         raise BadDirectionError
 
@@ -34,9 +34,9 @@ def path(unit, path, tile):
             unit.location = (loc[0] - 1, loc[1])
             tile = tile.left
 
-def check_path(unit, path, tile):
+def check_path(unit, path, tile, ignore_visibility=True):
     for step in path:
-        if not check_step(unit, step, tile):
+        if not check_step(unit, step, tile, ignore_visibility):
             return False
         if step == 'U':
             tile = tile.up
