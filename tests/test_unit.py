@@ -5,8 +5,7 @@ class TestUnit(TestCase):
         from warlord.unit import Unit
         self.unit = Unit()
 
-    def test_set_location(self):
-        self.unit.location = (0, 0)
+    def test_default_location(self):
         self.assertEqual(self.unit.location, (0, 0))
 
     def test_path_up(self):
@@ -37,3 +36,14 @@ class TestUnit(TestCase):
         from warlord.unit import path
         path(self.unit, ('U', 'U', 'L', 'L', 'D', 'R', 'D', 'L', 'U'))
         self.assertTrue(self.unit.location, (-2, 1))
+
+    def test_default_health(self):
+        self.assertEquals(self.unit.health, 0)
+
+    def test_damage_vs_unit(self):
+        from warlord.unit import calculate_damage
+        self.assertEqual(calculate_damage(self.unit, self.unit), 1)
+
+    def test_attack_count_vs_unit(self):
+        from warlord.unit import calculate_attack_count
+        self.assertEqual(calculate_attack_count(self.unit, self.unit), 1)

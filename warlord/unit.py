@@ -1,6 +1,7 @@
 class Unit(object):
     def __init__(self):
         self.location = (0, 0)
+        self.health = 0
 
 class BadDirectionError(ValueError):
     pass
@@ -19,3 +20,8 @@ def path(unit, path):
         else:
             raise BadDirectionError
 
+def calculate_damage(unitA, unitB):
+    return 1
+
+def calculate_attack_count(unitA, unitB):
+    return 1
