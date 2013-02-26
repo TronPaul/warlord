@@ -4,6 +4,13 @@ class Unit(object):
         self.health = 0
         self.speed = 0
         self.strength = 0
+        self.inventory = []
+
+    def add_item(self, item):
+        self.inventory.append(item)
+
+    def remove_item(self, item):
+        self.inventory.remove(item)
 
 def calculate_damage(unitA, unitB):
     return max(unitA.strength, 0)

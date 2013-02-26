@@ -53,3 +53,52 @@ class TestPath(TestCase):
         tile.up = Mock()
         tile.up.impassible = True
         self.assertRaises(ImpassibleTileError, path, self.unit, ('U',), tile)
+
+    def test_check_path_up(self):
+        from warlord.path import check_path
+        self.assertTrue(check_path(self.unit, ('U',), self.tile))
+
+    def test_check_path_down(self):
+        from warlord.path import check_path
+        self.assertTrue(check_path(self.unit, ('D',), self.tile))
+
+    def test_check_path_left(self):
+        from warlord.path import check_path
+        self.assertTrue(check_path(self.unit, ('L',), self.tile))
+
+    def test_check_path_right(self):
+        from warlord.path import check_path
+        self.assertTrue(check_path(self.unit, ('R',), self.tile))
+
+    def test_check_step_up(self):
+        from warlord.path import check_step
+        self.assertTrue(check_step(self.unit, 'U', self.tile))
+
+    def test_check_step_down(self):
+        from warlord.path import check_step
+        self.assertTrue(check_step(self.unit, 'D', self.tile))
+
+    def test_check_step_left(self):
+        from warlord.path import check_step
+        self.assertTrue(check_step(self.unit, 'L', self.tile))
+
+    def test_check_step_right(self):
+        from warlord.path import check_step
+        self.assertTrue(check_step(self.unit, 'R', self.tile))
+
+    def test_check_path_bad_direction(self):
+        from warlord.path import check_path, BadDirectionError
+        self.assertRaises(BadDirectionError, check_path, self.unit, ('X',), self.tile)
+
+    def test_multi_direction_path(self):
+        from warlord.path import check_path
+        self.assertTrue(check_path(self.unit,
+            ('U', 'U', 'L', 'L', 'D', 'R', 'D', 'L', 'U'), self.tile))
+
+    def test_path_with_impassible_square(self):
+        from warlord.path import check_path, ImpassibleTileError
+        tile = Mock()
+        tile.up = Mock()
+        tile.up.impassible = True
+        self.assertTrue(not check_path(self.unit, ('U',), tile))
+

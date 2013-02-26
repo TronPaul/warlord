@@ -1,4 +1,5 @@
 from unittest import TestCase
+from mock import Mock
 
 class TestUnit(TestCase):
     def setUp(self):
@@ -67,3 +68,18 @@ class TestUnit(TestCase):
         combat(self.unit, unitOther)
         self.assertEqual(self.unit.health, 99)
         self.assertEqual(unitOther.health, 0)
+
+    def test_default_inventory(self):
+        self.assertEqual(self.unit.inventory, [])
+
+    def test_add_item(self):
+        item = Mock()
+        self.unit.add_item(item)
+        self.assertEqual(len(self.unit.inventory), 1)
+        self.assertEqual(self.unit.inventory[0], item)
+
+    def test_remove_item(self):
+        item = Mock()
+        self.unit.inventory.append(item)
+        self.unit.remove_item(item)
+        self.assertEqual(len(self.unit.inventory), 0)
