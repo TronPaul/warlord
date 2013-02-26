@@ -2,7 +2,8 @@ class Unit(object):
     def __init__(self):
         self.location = (0, 0)
         self.health = 0
-        self.speed = 1
+        self.speed = 0
+        self.strength = 0
 
 class BadDirectionError(ValueError):
     pass
@@ -22,11 +23,10 @@ def path(unit, path):
             raise BadDirectionError
 
 def calculate_damage(unitA, unitB):
-    return 1
+    return max(unitA.strength, 0)
 
 def calculate_attack_count(unitA, unitB):
-    attacks =  unitA.speed - unitB.speed + 1
-    return attacks if attacks > 0 else 1
+    return max(unitA.speed - unitB.speed + 1, 1)
 
 def combat(unitA, unitB):
     units = (unitA, unitB)

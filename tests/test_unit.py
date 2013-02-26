@@ -40,12 +40,21 @@ class TestUnit(TestCase):
     def test_default_health(self):
         self.assertEquals(self.unit.health, 0)
 
+    def test_default_strength(self):
+        self.assertEquals(self.unit.strength, 0)
+
     def test_damage_vs_unit(self):
         from warlord.unit import calculate_damage
+        self.unit.strength = 1
         self.assertEqual(calculate_damage(self.unit, self.unit), 1)
 
+    def test_damage_vs_unit_with_strength(self):
+        from warlord.unit import calculate_damage
+        self.unit.strength = 2
+        self.assertEqual(calculate_damage(self.unit, self.unit), 2)
+
     def test_default_speed(self):
-        self.assertEquals(self.unit.speed, 1)
+        self.assertEquals(self.unit.speed, 0)
 
     def test_attack_count_vs_unit(self):
         from warlord.unit import calculate_attack_count
@@ -54,7 +63,7 @@ class TestUnit(TestCase):
     def test_attack_count_vs_other_unit(self):
         from warlord.unit import Unit, calculate_attack_count
         unitOther = Unit()
-        self.unit.speed = 2
+        self.unit.speed = 1
         self.assertEqual(calculate_attack_count(self.unit, unitOther), 2)
 
     def test_combat(self):
@@ -62,6 +71,8 @@ class TestUnit(TestCase):
         unitOther = Unit()
         unitOther.health = 99
         self.unit.health = 99
+        self.unit.strength = 1
+        unitOther.strength = 1
         combat(self.unit, unitOther)
         self.assertEqual(self.unit.health, 98)
         self.assertEqual(unitOther.health, 98)
@@ -69,13 +80,17 @@ class TestUnit(TestCase):
     def test_combat_with_dead_units_does_nothing(self):
         from warlord.unit import Unit, combat
         unitOther = Unit()
+        self.unit.strength = 1
+        unitOther.strength = 1
         combat(self.unit, unitOther)
         self.assertEqual(self.unit.health, 0)
         self.assertEqual(unitOther.health, 0)
 
-    def test_combat_where_unit_dies_stops(self):
+    def test_combat_where_unit_death_stops_combat(self):
         from warlord.unit import Unit, combat
         unitOther = Unit()
+        self.unit.strength = 1
+        unitOther.strength = 1
         unitOther.health = 1
         self.unit.health = 99
         combat(self.unit, unitOther)
