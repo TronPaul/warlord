@@ -72,6 +72,9 @@ class TestUnit(TestCase):
     def test_default_inventory(self):
         self.assertEqual(self.unit.inventory, [])
 
+    def test_default_equipped_item(self):
+        self.assertEqual(self.unit.equipped_item, None)
+
     def test_add_item(self):
         item = Mock()
         self.unit.add_item(item)
@@ -83,3 +86,14 @@ class TestUnit(TestCase):
         self.unit.inventory.append(item)
         self.unit.remove_item(item)
         self.assertEqual(len(self.unit.inventory), 0)
+
+    def test_equip_item(self):
+        item = Mock()
+        self.unit.inventory.append(item)
+        self.unit.equip_item(item)
+        self.assertEqual(self.unit.equipped_item, item)
+
+    def test_equip_item_item_not_in_inventory(self):
+        from warlord.unit import ItemNotInInventoryError
+        item = Mock()
+        self.assertRaises(ItemNotInInventoryError, self.unit.equip_item, item)

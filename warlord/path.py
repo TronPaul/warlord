@@ -46,4 +46,4 @@ def check_path(unit, path, tile):
             tile = tile.right
         elif step == 'L':
             tile = tile.left
-        return True
+    return True
