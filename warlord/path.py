@@ -6,13 +6,13 @@ class ImpassibleTileError(ValueError):
 
 def check_step(unit, step, tile):
     if step == 'U':
-        return not tile.up.impassible
+        return unit.is_passible(tile.up)
     elif step == 'D':
-        return not tile.down.impassible
+        return unit.is_passible(tile.down)
     elif step == 'R':
-        return not tile.right.impassible
+        return unit.is_passible(tile.right)
     elif step == 'L':
-        return not tile.left.impassible
+        return unit.is_passible(tile.left)
     else:
         raise BadDirectionError
 

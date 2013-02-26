@@ -97,3 +97,8 @@ class TestUnit(TestCase):
         from warlord.unit import ItemNotInInventoryError
         item = Mock()
         self.assertRaises(ItemNotInInventoryError, self.unit.equip_item, item)
+
+    def test_is_passible_with_impassible_tile(self):
+        tile = Mock()
+        tile.impassible.return_value = True
+        self.assertTrue(not self.unit.is_passible(tile))

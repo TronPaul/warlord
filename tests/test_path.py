@@ -50,7 +50,7 @@ class TestPath(TestCase):
     def test_path_with_impassible_square(self):
         from warlord.path import path, ImpassibleTileError
         tile = Mock()
-        tile.up.return_value.impassible = True
+        self.unit.is_passible.return_value = False
         self.assertRaises(ImpassibleTileError, path, self.unit, ('U',), tile)
 
     def test_check_path_up(self):
@@ -97,6 +97,5 @@ class TestPath(TestCase):
     def test_check_path_with_impassible_square(self):
         from warlord.path import check_path, ImpassibleTileError
         tile = Mock()
-        tile.up = Mock()
-        tile.up.impassible = True
+        self.unit.is_passible.return_value = False
         self.assertTrue(not check_path(self.unit, ('U',), tile))

@@ -21,6 +21,9 @@ class Unit(object):
             raise ItemNotInInventoryError
         self.equipped_item = item
 
+    def is_passible(self, tile):
+        return not tile.impassible
+
 def calculate_damage(unitA, unitB):
     return max(unitA.strength, 0)
 
