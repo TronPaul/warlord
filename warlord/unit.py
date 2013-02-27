@@ -32,8 +32,14 @@ class Unit(object):
     def add_experience(self, experience):
         self.experience += experience
         if self.experience >= 100:
-            self.level = (self.experience / 100) + 1
+            level_diff = (self.experience / 100)
+            self.level += level_diff
+            for i in range(level_diff):
+                self.level_up_stats()
             self.experience = self.experience % 100
+
+    def level_up_stats(self):
+        pass
 
 def calculate_damage(unitA, unitB):
     return max(unitA.strength, 0)

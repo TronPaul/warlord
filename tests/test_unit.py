@@ -116,12 +116,30 @@ class TestUnit(TestCase):
         self.unit.add_experience(1)
         self.assertEquals(self.unit.experience, 1)
 
-    def test_add_experience_with_level_up(self):
+    def test_add_experience_with_level_up_levels_up(self):
         self.unit.add_experience(100)
         self.assertEquals(self.unit.experience, 0)
         self.assertEquals(self.unit.level, 2)
 
-    def test_add_experience_with_level_up_and_extra(self):
+    def test_add_experience_with_level_2_levels_up_to_3(self):
+        self.unit.level = 2
+        self.unit.add_experience(100)
+        self.assertEquals(self.unit.level, 3)
+    def test_add_experience_with_level_up_and_extra_levels_up_with_extra_exp(self):
         self.unit.add_experience(101)
         self.assertEquals(self.unit.experience, 1)
         self.assertEquals(self.unit.level, 2)
+
+    def test_add_experience_with_level_up_calls_level_up_stats(self):
+        mock = Mock()
+        self.unit.level_up_stats = mock
+        self.unit.add_experience(100)
+        mock.assert_called_once_with()
+
+    def test_add_experience_with_multi_level_up_calls_level_up_stats(self):
+        mock = Mock()
+        self.unit.level_up_stats = mock
+        self.unit.add_experience(200)
+        mock.assert_called_with()
+        self.assertEquals(mock.call_count, 2)
+
