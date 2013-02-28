@@ -40,7 +40,6 @@ class TestStatChangingMixin(TestCase):
     def test_use_item_affects_stats(self):
         unit = Mock()
         unit.stat = 1
-        self.item.uses = 1
         self.item.stats = {'stat': 1}
         self.item.use(unit)
         self.assertEquals(unit.stat, 2)

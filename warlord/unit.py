@@ -6,20 +6,26 @@ class Unit(object):
         self.location = (0, 0)
         self.level = 1
         self.experience = 0
-        self.health = 0
+        self._health = 0
         self.max_health = 0
         self.speed = 0
         self.strength = 0
         self.inventory = []
         self.equipped_item = None
 
+    @property
+    def health(self):
+        return self._health
+
+    @health.setter
+    def health(self, value):
+        self._health = min(max(value, 0), self.max_health)
+
     def damage(self, amount):
         self.health -= amount
-        self.health = max(self.health, 0)
 
     def heal(self, amount):
         self.health += amount
-        self.health = min(self.health, self.maxHealth)
 
     def add_item(self, item):
         self.inventory.append(item)

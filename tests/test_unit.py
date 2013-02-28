@@ -12,6 +12,14 @@ class TestUnit(TestCase):
     def test_default_health(self):
         self.assertEquals(self.unit.health, 0)
 
+    def test_health_does_not_go_below_0(self):
+        self.unit.health -= 1
+        self.assertEquals(self.unit.health, 0)
+
+    def test_health_does_not_go_above_max_health(self):
+        self.unit.health += 1
+        self.assertEquals(self.unit.health, 0)
+
     def test_default_max_health(self):
         self.assertEquals(self.unit.max_health, 0)
 
@@ -29,12 +37,12 @@ class TestUnit(TestCase):
         self.assertEquals(self.unit.health, 0)
 
     def test_heal(self):
-        self.unit.maxHealth = 1
+        self.unit.max_health = 1
         self.unit.heal(1)
         self.assertEquals(self.unit.health, 1)
 
     def test_heal_does_not_go_above_max_health(self):
-        self.unit.maxHealth = 1
+        self.unit.max_health = 1
         self.unit.heal(2)
         self.assertEquals(self.unit.health, 1)
 
@@ -64,6 +72,8 @@ class TestUnit(TestCase):
     def test_combat(self):
         from warlord.unit import Unit, combat
         unitOther = Unit()
+        unitOther.max_health = 99
+        self.unit.max_health = 99
         unitOther.health = 99
         self.unit.health = 99
         self.unit.strength = 1
@@ -84,6 +94,8 @@ class TestUnit(TestCase):
     def test_combat_where_unit_death_stops_combat(self):
         from warlord.unit import Unit, combat
         unitOther = Unit()
+        unitOther.max_health = 1
+        self.unit.max_health = 99
         self.unit.strength = 1
         unitOther.strength = 1
         unitOther.health = 1
