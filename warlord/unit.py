@@ -66,7 +66,7 @@ def combat(unitA, unitB):
             units]):
         attacker = units[unit_num]
         defender = units[(unit_num + 1) % 2]
-        defender.health -= calculate_damage(attacker, defender)
+        defender.damage(calculate_damage(attacker, defender))
         attack_counts = ((attack_counts[0] if unit_num == 1 else
                 attack_counts[0] - 1), (attack_counts[1] if unit_num == 0 else
                     attack_counts[1] - 1))
