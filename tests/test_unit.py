@@ -12,13 +12,36 @@ class TestUnit(TestCase):
     def test_default_health(self):
         self.assertEquals(self.unit.health, 0)
 
+    def test_default_max_health(self):
+        self.assertEquals(self.unit.max_health, 0)
+
     def test_default_strength(self):
         self.assertEquals(self.unit.strength, 0)
+
+    def test_damage(self):
+        self.unit.health = 1
+        self.unit.damage(1)
+        self.assertEquals(self.unit.health, 0)
+
+    def test_damage_does_not_go_below_0(self):
+        self.unit.health = 1
+        self.unit.damage(2)
+        self.assertEquals(self.unit.health, 0)
+
+    def test_heal(self):
+        self.unit.maxHealth = 1
+        self.unit.heal(1)
+        self.assertEquals(self.unit.health, 1)
+
+    def test_heal_does_not_go_above_max_health(self):
+        self.unit.maxHealth = 1
+        self.unit.heal(2)
+        self.assertEquals(self.unit.health, 1)
 
     def test_damage_vs_unit(self):
         from warlord.unit import calculate_damage
         self.unit.strength = 1
-        self.assertEqual(calculate_damage(self.unit, self.unit), 1)
+        self.assertEquals(calculate_damage(self.unit, self.unit), 1)
 
     def test_damage_vs_unit_with_strength(self):
         from warlord.unit import calculate_damage
@@ -142,4 +165,3 @@ class TestUnit(TestCase):
         self.unit.add_experience(200)
         mock.assert_called_with()
         self.assertEquals(mock.call_count, 2)
-
