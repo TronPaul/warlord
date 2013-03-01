@@ -37,6 +37,12 @@ class StatManager(object):
         self.stats = {}
 
     def __getitem__(self, key):
+        if key.startswith('min_'):
+            key = key[4:]
+            return self.stats[key].min_value
+        elif key.startswith('max_'):
+            key = key[4:]
+            return self.stats[key].max_value
         return self.stats[key].value
 
     def __setitem__(self, key, value):

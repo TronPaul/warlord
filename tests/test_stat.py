@@ -53,6 +53,7 @@ class TestStatManager(TestCase):
     def test_add_min_stat(self):
         self.man.add_stat('name', min_value=0)
         self.assertEqual(self.man['name'], 0)
+        self.assertEqual(self.man['min_name'], 0)
 
     def test_add_min_stat_follows_min(self):
         self.man.add_stat('name', min_value=0)
@@ -62,6 +63,7 @@ class TestStatManager(TestCase):
     def test_add_max_stat(self):
         self.man.add_stat('name', max_value=0)
         self.assertEqual(self.man['name'], 0)
+        self.assertEqual(self.man['max_name'], 0)
 
     def test_add_max_stat_follows_max(self):
         self.man.add_stat('name', max_value=0)
