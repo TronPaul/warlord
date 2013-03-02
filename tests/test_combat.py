@@ -2,6 +2,46 @@ from unittest import TestCase
 from mock import Mock, patch
 
 class TestCombat(TestCase):
+    def test_magical_attack_power(self):
+        from warlord.unit import calculate_magical_attack_power
+        unitA = Mock()
+        unitB = Mock()
+        unitA.magic = 0
+        unitA.equipped_item.might = 0
+        unitA.equipped_item.weapon_counter_bonus.return_value = 0
+        unitA.equipped_item.unit_counter_bonus.return_value = 0
+        self.assertEquals(calculate_magical_attack_power(unitA, unitB), 0)
+        unitA.magic = 1
+        self.assertEquals(calculate_magical_attack_power(unitA, unitB), 1)
+        unitA.equipped_item.might = 1
+        self.assertEquals(calculate_magical_attack_power(unitA, unitB), 2)
+        unitA.equipped_item.weapon_counter_bonus.return_value = 1
+        self.assertEquals(calculate_magical_attack_power(unitA, unitB), 3)
+        unitA.equipped_item.unit_counter_bonus.return_value = 1
+        self.assertEquals(calculate_magical_attack_power(unitA, unitB), 5)
+        unitA.equipped_item.might = 2
+        self.assertEquals(calculate_magical_attack_power(unitA, unitB), 7)
+
+    def test_physical_attack_power(self):
+        from warlord.unit import calculate_physical_attack_power
+        unitA = Mock()
+        unitB = Mock()
+        unitA.strength = 0
+        unitA.equipped_item.might = 0
+        unitA.equipped_item.weapon_counter_bonus.return_value = 0
+        unitA.equipped_item.unit_counter_bonus.return_value = 0
+        self.assertEquals(calculate_physical_attack_power(unitA, unitB), 0)
+        unitA.strength = 1
+        self.assertEquals(calculate_physical_attack_power(unitA, unitB), 1)
+        unitA.equipped_item.might = 1
+        self.assertEquals(calculate_physical_attack_power(unitA, unitB), 2)
+        unitA.equipped_item.weapon_counter_bonus.return_value = 1
+        self.assertEquals(calculate_physical_attack_power(unitA, unitB), 3)
+        unitA.equipped_item.unit_counter_bonus.return_value = 1
+        self.assertEquals(calculate_physical_attack_power(unitA, unitB), 5)
+        unitA.equipped_item.might = 2
+        self.assertEquals(calculate_physical_attack_power(unitA, unitB), 7)
+
     def test_damage_vs_unit(self):
         from warlord.unit import calculate_damage
         unit = Mock()

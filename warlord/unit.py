@@ -76,6 +76,23 @@ class Unit(HasStats):
     def level_up_stats(self):
         pass
 
+def _attack_power(atk_stat, might, weapon_counter, unit_counter):
+    return atk_stat + (might + weapon_counter) * (unit_counter + 1)
+
+def calculate_magical_attack_power(unitA, unitB):
+    weaponA = unitA.equipped_item
+    weaponB = unitB.equipped_item
+    return _attack_power(unitA.magic, weaponA.might,
+        weaponA.weapon_counter_bonus(weaponB),
+        weaponA.unit_counter_bonus(unitB))
+
+def calculate_physical_attack_power(unitA, unitB):
+    weaponA = unitA.equipped_item
+    weaponB = unitB.equipped_item
+    return _attack_power(unitA.strength, weaponA.might,
+        weaponA.weapon_counter_bonus(weaponB),
+        weaponA.unit_counter_bonus(unitB))
+
 def calculate_damage(unitA, unitB):
     return max(unitA.strength, 0)
 
