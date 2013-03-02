@@ -42,6 +42,24 @@ class TestCombat(TestCase):
         unitA.equipped_item.might = 2
         self.assertEquals(calculate_physical_attack_power(unitA, unitB), 7)
 
+    @patch('warlord.unit.calculate_magical_attack_power')
+    def test_attack_power(self, calc_mag_atk_pwr):
+        from warlord.unit import calculate_attack_power
+        unitA = Mock()
+        unitB = Mock()
+        unitA.equipped_item.type = 'magical'
+        calculate_attack_power(unitA, unitB)
+        calc_mag_atk_pwr.assert_called_once_with(unitA, unitB)
+
+    @patch('warlord.unit.calculate_physical_attack_power')
+    def test_attack_power(self, calc_phys_atk_pwr):
+        from warlord.unit import calculate_attack_power
+        unitA = Mock()
+        unitB = Mock()
+        unitA.equipped_item.type = 'physical'
+        calculate_attack_power(unitA, unitB)
+        calc_phys_atk_pwr.assert_called_once_with(unitA, unitB)
+
     def test_damage_vs_unit(self):
         from warlord.unit import calculate_damage
         unit = Mock()
