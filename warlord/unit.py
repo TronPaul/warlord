@@ -34,7 +34,7 @@ class Unit(HasStats):
         self.equipped_item = item
 
     def is_passible(self, tile):
-        raise NotImplementedError
+        return tile is not None
 
     def is_visible(self, tile):
         raise NotImplementedError

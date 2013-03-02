@@ -136,9 +136,12 @@ class TestUnit(TestCase):
         item = Mock()
         self.assertRaises(ItemNotInInventoryError, self.unit.equip_item, item)
 
-    def test_is_passible_raises_not_implemented(self):
+    def test_is_passible(self):
         tile = Mock()
-        self.assertRaises(NotImplementedError, self.unit.is_passible, tile)
+        self.assertTrue(self.unit.is_passible(tile))
+
+    def test_is_passible_without_tile(self):
+        self.assertTrue(not self.unit.is_passible(None))
 
     def test_is_visible_raises_not_implemented(self):
         tile = Mock()
