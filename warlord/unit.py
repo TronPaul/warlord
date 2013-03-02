@@ -22,12 +22,6 @@ class Unit(HasStats):
     def evade(self):
         return self.speed * 2 + self.luck
 
-    def damage(self, amount):
-        self.health -= amount
-
-    def heal(self, amount):
-        self.health += amount
-
     def add_item(self, item):
         self.inventory.append(item)
 
@@ -74,7 +68,7 @@ def combat(unitA, unitB):
             units]):
         attacker = units[unit_num]
         defender = units[(unit_num + 1) % 2]
-        defender.damage(calculate_damage(attacker, defender))
+        defender.health -= calculate_damage(attacker, defender)
         attack_counts = ((attack_counts[0] if unit_num == 1 else
                 attack_counts[0] - 1), (attack_counts[1] if unit_num == 0 else
                     attack_counts[1] - 1))
