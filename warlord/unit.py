@@ -1,25 +1,19 @@
+from stat import HasStats
+
 class ItemNotInInventoryError(LookupError):
     pass
 
-class Unit(object):
+class Unit(HasStats):
     def __init__(self):
         self.location = (0, 0)
         self.level = 1
         self.experience = 0
-        self._health = 0
-        self.max_health = 0
         self.speed = 0
         self.strength = 0
         self.inventory = []
         self.equipped_item = None
 
-    @property
-    def health(self):
-        return self._health
-
-    @health.setter
-    def health(self, value):
-        self._health = min(max(value, 0), self.max_health)
+        self.add_stat('health', min_value=0, max_value=0)
 
     def damage(self, amount):
         self.health -= amount
