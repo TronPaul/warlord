@@ -18,3 +18,7 @@ class TestWeapon(TestCase):
     def test_trinity_bonus_raises_not_implemented(self):
         self.assertRaises(NotImplementedError, self.weapon.trinity_bonus,
                 Mock())
+
+    def test_effectiveness_raises_not_implemented(self):
+        self.assertRaises(NotImplementedError, self.weapon.effectiveness,
+                Mock())

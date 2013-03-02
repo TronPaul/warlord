@@ -9,3 +9,6 @@ class Weapon(LimitedUsesMixin, Item):
 
     def trinity_bonus(self, otherWeapon):
         raise NotImplementedError
+
+    def effectiveness(self, unit):
+        raise NotImplementedError
