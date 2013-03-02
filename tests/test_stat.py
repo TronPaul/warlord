@@ -63,12 +63,34 @@ class TestHasStatsMixin(TestCase):
         self.assertEquals(self.statable.max_name, 0)
         self.assertEquals(self.statable._stat_name.value, 0)
 
+    def test_set_max_value(self):
+        self.statable.add_stat('name', max_value=0)
+        self.statable.max_name = 1
+        self.statable.name = 1
+        self.assertEquals(self.statable.name, 1)
+        self.assertEquals(self.statable.max_name, 1)
+        self.assertEquals(self.statable._stat_name.value, 1)
+        self.statable.name = 2
+        self.assertEquals(self.statable.name, 1)
+        self.assertEquals(self.statable._stat_name.value, 1)
+
     def test_add_min_stat(self):
         self.statable.add_stat('name', min_value=0)
         self.statable.name = -1
         self.assertEquals(self.statable.name, 0)
         self.assertEquals(self.statable.min_name, 0)
         self.assertEquals(self.statable._stat_name.value, 0)
+
+    def test_set_min_value(self):
+        self.statable.add_stat('name', min_value=0)
+        self.statable.min_name = -1
+        self.statable.name = -1
+        self.assertEquals(self.statable.name, -1)
+        self.assertEquals(self.statable.min_name, -1)
+        self.assertEquals(self.statable._stat_name.value, -1)
+        self.statable.name = -2
+        self.assertEquals(self.statable.name, -1)
+        self.assertEquals(self.statable._stat_name.value, -1)
 
     def test_add_min_max_stat(self):
         self.statable.add_stat('name', min_value=0, max_value=0)

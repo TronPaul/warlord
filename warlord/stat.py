@@ -49,6 +49,10 @@ class HasStats(object):
             stat = self.get_stat(name)
             stat.value = value
             return
+        elif name.startswith('max_') or name.startswith('min_'):
+            val_type = name[:4]
+            name = name[4:]
+            return setattr(self.get_stat(name), val_type + 'value', value)
         return super(HasStats, self).__setattr__(name, value)
 
     def has_stat(self, name):
