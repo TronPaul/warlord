@@ -12,16 +12,40 @@ class Unit(HasStats):
         self.inventory = []
         self.equipped_item = None
 
+        self.critical = 0
         self.add_stat('health', min_value=0, max_value=0)
         self.add_stat('strength')
+        self.add_stat('magic')
         self.add_stat('speed')
         self.add_stat('luck')
         self.add_stat('skill')
         self.add_stat('defense')
+        self.add_stat('resistance')
+
+    @property
+    def hit_rate(self):
+        return self.equipped_item.accuracy + self.skill * 2 + self.luck
 
     @property
     def evade(self):
         return self.speed * 2 + self.luck
+
+    @property
+    def magical_defense_power(self):
+        return self.resistance
+
+    @property
+    def physical_defense_power(self):
+        return self.defense
+
+    @property
+    def critical_rate(self):
+        return (self.equipped_item.critical + int(self.skill / 2) +
+            self.critical)
+
+    @property
+    def critical_evade(self):
+        return self.luck
 
     def add_item(self, item):
         self.inventory.append(item)

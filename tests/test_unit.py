@@ -12,6 +12,9 @@ class TestUnit(TestCase):
     def test_default_tile(self):
         self.assertTrue(self.unit.tile is None)
 
+    def test_default_critical(self):
+        self.assertEquals(self.unit.critical, 0)
+
     def test_default_health(self):
         self.assertEquals(self.unit.health, 0)
 
@@ -20,6 +23,9 @@ class TestUnit(TestCase):
 
     def test_default_strength(self):
         self.assertEquals(self.unit.strength, 0)
+
+    def test_default_magic(self):
+        self.assertEquals(self.unit.magic, 0)
 
     def test_default_speed(self):
         self.assertEquals(self.unit.speed, 0)
@@ -33,6 +39,9 @@ class TestUnit(TestCase):
     def test_default_defense(self):
         self.assertEquals(self.unit.defense, 0)
 
+    def test_default_resistance(self):
+        self.assertEquals(self.unit.resistance, 0)
+
     def test_evade(self):
         self.unit.speed = 1
         self.assertEquals(self.unit.evade, 2)
@@ -40,6 +49,49 @@ class TestUnit(TestCase):
         self.assertEquals(self.unit.evade, 3)
         self.unit.speed = 2
         self.assertEquals(self.unit.evade, 5)
+
+    def test_hit_rate(self):
+        weapon = Mock()
+        weapon.accuracy = 0
+        self.unit.equipped_item = weapon
+        self.assertEquals(self.unit.hit_rate, 0)
+        self.unit.skill = 1
+        self.assertEquals(self.unit.hit_rate, 2)
+        self.unit.luck = 1
+        self.assertEquals(self.unit.hit_rate, 3)
+        self.unit.skill = 2
+        self.assertEquals(self.unit.hit_rate, 5)
+        weapon.accuracy = 1
+        self.assertEquals(self.unit.hit_rate, 6)
+
+    def test_magical_defense_power(self):
+        self.assertEquals(self.unit.magical_defense_power, 0)
+        self.unit.resistance = 1
+        self.assertEquals(self.unit.magical_defense_power, 1)
+
+    def test_physical_defense_power(self):
+        self.assertEquals(self.unit.physical_defense_power, 0)
+        self.unit.defense = 1
+        self.assertEquals(self.unit.physical_defense_power, 1)
+
+    def test_critical_rate(self):
+        weapon = Mock()
+        weapon.critical = 0
+        self.unit.equipped_item = weapon
+        self.assertEquals(self.unit.critical_rate, 0)
+        self.unit.skill = 1
+        self.assertEquals(self.unit.critical_rate, 0)
+        self.unit.skill = 2
+        self.assertEquals(self.unit.critical_rate, 1)
+        self.unit.critical = 1
+        self.assertEquals(self.unit.critical_rate, 2)
+        weapon.critical = 1
+        self.assertEquals(self.unit.critical_rate, 3)
+
+    def test_critical_evade(self):
+        self.assertEquals(self.unit.critical_evade, 0)
+        self.unit.luck = 1
+        self.assertEquals(self.unit.critical_evade, 1)
 
     def test_health_does_not_go_below_0(self):
         self.unit.health -= 1
