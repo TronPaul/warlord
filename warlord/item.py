@@ -6,9 +6,7 @@ class Item(object):
 
 class IsUsableMixin(object):
     def use(self, *args, **kwargs):
-        parent = super(IsUsableMixin, self)
-        if hasattr(parent, 'use'):
-            parent.use(*args, **kwargs)
+        pass
 
 class LimitedUsesMixin(IsUsableMixin):
     def __init__(self):
