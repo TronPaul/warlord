@@ -15,10 +15,22 @@ class TestWeapon(TestCase):
     def test_default_might(self):
         self.assertEquals(self.weapon.might, 0)
 
-    def test_trinity_bonus_raises_not_implemented(self):
-        self.assertRaises(NotImplementedError, self.weapon.trinity_bonus,
+    def test_default_countered_weapon_types(self):
+        self.assertEquals(self.weapon.countered_weapon_types, [])
+
+    def test_default_countered_by_weapon_types(self):
+        self.assertEquals(self.weapon.countered_by_weapon_types, [])
+
+    def test_default_countered_unit_types(self):
+        self.assertEquals(self.weapon.countered_unit_types, [])
+
+    def test_default_countered_by_unit_types(self):
+        self.assertEquals(self.weapon.countered_by_unit_types, [])
+
+    def test_weapon_counter_bonus_raises_not_implemented(self):
+        self.assertRaises(NotImplementedError, self.weapon.weapon_counter_bonus,
                 Mock())
 
-    def test_effectiveness_raises_not_implemented(self):
-        self.assertRaises(NotImplementedError, self.weapon.effectiveness,
+    def test_unit_counter_raises_not_implemented(self):
+        self.assertRaises(NotImplementedError, self.weapon.unit_counter_bonus,
                 Mock())
