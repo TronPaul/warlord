@@ -55,7 +55,8 @@ def calculate_damage(unitA, unitB):
     return max(unitA.strength, 0)
 
 def calculate_attack_count(unitA, unitB):
-    return max(unitA.speed - unitB.speed + 1, 1)
+    dif = unitA.speed - unitB.speed
+    return 2 if dif > 3 else 1
 
 def combat(unitA, unitB):
     units = (unitA, unitB)
