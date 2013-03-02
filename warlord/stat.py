@@ -38,7 +38,11 @@ class HasStats(object):
         if hasattr(self, self._stat_prefix + name):
             stat = self.get_stat(name)
             return stat.value
-        return super(HasStats, self).__getattr__(name)
+        if name.startswith('max_') or name.startswith('min_'):
+            val_type = name[:4]
+            name = name[4:]
+            return getattr(self.get_stat(name), val_type + 'value')
+        return super(HasStats, self).__getattribute__(name)
 
     def __setattr__(self, name, value):
         if hasattr(self, self._stat_prefix + name):
@@ -53,6 +57,17 @@ class HasStats(object):
     def get_stat(self, name):
         return self.__dict__[self._stat_prefix + name]
 
-    def add_stat(self, name):
-        stat = Stat()
+    def add_stat(self, name, min_value=None, max_value=None):
+        if min_value is not None and max_value is not None:
+            stat = MinMaxStat()
+            stat.min_value = min_value
+            stat.max_value = max_value
+        elif max_value is not None:
+            stat = MaxStat()
+            stat.max_value = max_value
+        elif min_value is not None:
+            stat = MinStat()
+            stat.min_value = min_value
+        else:
+            stat = Stat()
         setattr(self, self._stat_prefix + name, stat)
