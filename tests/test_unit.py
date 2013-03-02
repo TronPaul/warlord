@@ -30,6 +30,9 @@ class TestUnit(TestCase):
     def test_default_skill(self):
         self.assertEquals(self.unit.skill, 0)
 
+    def test_default_defense(self):
+        self.assertEquals(self.unit.defense, 0)
+
     def test_evade(self):
         self.unit.speed = 1
         self.assertEquals(self.unit.evade, 2)
@@ -45,73 +48,6 @@ class TestUnit(TestCase):
     def test_health_does_not_go_above_max_health(self):
         self.unit.health += 1
         self.assertEquals(self.unit.health, 0)
-
-    def test_damage_vs_unit(self):
-        from warlord.unit import calculate_damage
-        self.unit.strength = 1
-        self.assertEquals(calculate_damage(self.unit, self.unit), 1)
-
-    def test_damage_vs_unit_with_strength(self):
-        from warlord.unit import calculate_damage
-        self.unit.strength = 2
-        self.assertEqual(calculate_damage(self.unit, self.unit), 2)
-
-    def test_attack_count_vs_unit_with_same_speed(self):
-        from warlord.unit import calculate_attack_count
-        self.assertEqual(calculate_attack_count(self.unit, self.unit), 1)
-
-    def test_attack_count_vs_unit_with_3_less_speed(self):
-        from warlord.unit import calculate_attack_count
-        unitOther = Mock()
-        self.unit.speed = 3
-        self.assertEqual(calculate_attack_count(self.unit, self.unit), 1)
-
-    def test_attack_count_vs_unit_with_4_less_speed(self):
-        from warlord.unit import Unit, calculate_attack_count
-        unitOther = Unit()
-        self.unit.speed = 4
-        self.assertEqual(calculate_attack_count(self.unit, unitOther), 2)
-
-    def test_attack_count_vs_unit_with_5_less_speed(self):
-        from warlord.unit import Unit, calculate_attack_count
-        unitOther = Unit()
-        self.unit.speed = 5
-        self.assertEqual(calculate_attack_count(self.unit, unitOther), 2)
-
-    def test_combat(self):
-        from warlord.unit import Unit, combat
-        unitOther = Unit()
-        unitOther.max_health = 99
-        self.unit.max_health = 99
-        unitOther.health = 99
-        self.unit.health = 99
-        self.unit.strength = 1
-        unitOther.strength = 1
-        combat(self.unit, unitOther)
-        self.assertEqual(self.unit.health, 98)
-        self.assertEqual(unitOther.health, 98)
-
-    def test_combat_with_dead_units_does_nothing(self):
-        from warlord.unit import Unit, combat
-        unitOther = Unit()
-        self.unit.strength = 1
-        unitOther.strength = 1
-        combat(self.unit, unitOther)
-        self.assertEqual(self.unit.health, 0)
-        self.assertEqual(unitOther.health, 0)
-
-    def test_combat_where_unit_death_stops_combat(self):
-        from warlord.unit import Unit, combat
-        unitOther = Unit()
-        unitOther.max_health = 1
-        self.unit.max_health = 99
-        self.unit.strength = 1
-        unitOther.strength = 1
-        unitOther.health = 1
-        self.unit.health = 99
-        combat(self.unit, unitOther)
-        self.assertEqual(self.unit.health, 99)
-        self.assertEqual(unitOther.health, 0)
 
     def test_default_inventory(self):
         self.assertEqual(self.unit.inventory, [])

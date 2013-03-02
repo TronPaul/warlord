@@ -17,6 +17,7 @@ class Unit(HasStats):
         self.add_stat('speed')
         self.add_stat('luck')
         self.add_stat('skill')
+        self.add_stat('defense')
 
     @property
     def evade(self):
