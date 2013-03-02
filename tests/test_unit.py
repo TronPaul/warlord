@@ -24,6 +24,20 @@ class TestUnit(TestCase):
     def test_default_speed(self):
         self.assertEquals(self.unit.speed, 0)
 
+    def test_default_luck(self):
+        self.assertEquals(self.unit.luck, 0)
+
+    def test_default_skill(self):
+        self.assertEquals(self.unit.skill, 0)
+
+    def test_evade(self):
+        self.unit.speed = 1
+        self.assertEquals(self.unit.evade, 2)
+        self.unit.luck = 1
+        self.assertEquals(self.unit.evade, 3)
+        self.unit.speed = 2
+        self.assertEquals(self.unit.evade, 5)
+
     def test_health_does_not_go_below_0(self):
         self.unit.health -= 1
         self.assertEquals(self.unit.health, 0)

@@ -15,6 +15,12 @@ class Unit(HasStats):
         self.add_stat('health', min_value=0, max_value=0)
         self.add_stat('strength')
         self.add_stat('speed')
+        self.add_stat('luck')
+        self.add_stat('skill')
+
+    @property
+    def evade(self):
+        return self.speed * 2 + self.luck
 
     def damage(self, amount):
         self.health -= amount
