@@ -6,8 +6,11 @@ class TestUnit(TestCase):
         from warlord.unit import Unit
         self.unit = Unit()
 
-    def test_default_location(self):
-        self.assertEqual(self.unit.location, (0, 0))
+    def test_default_team(self):
+        self.assertEqual(self.unit.team, 0)
+
+    def test_default_tile(self):
+        self.assertTrue(self.unit.tile is None)
 
     def test_default_health(self):
         self.assertEquals(self.unit.health, 0)

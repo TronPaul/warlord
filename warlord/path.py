@@ -16,23 +16,21 @@ def check_step(unit, step, tile, ignore_visibility=True):
     else:
         raise BadDirectionError
 
-def path(unit, path, tile):
+def path(unit, path):
+    tile = unit.tile
     for step in path:
-        loc = unit.location
         if not check_step(unit, step, tile):
             raise ImpassibleTileError
         if step == 'U':
-            unit.location = (loc[0], loc[1] + 1)
             tile = tile.up
         elif step =='D':
-            unit.location = (loc[0], loc[1] - 1)
             tile = tile.down
         elif step == 'R':
-            unit.location = (loc[0] + 1, loc[1])
             tile = tile.right
         elif step =='L':
-            unit.location = (loc[0] - 1, loc[1])
             tile = tile.left
+    tile.unit = unit
+    unit.tile = tile
 
 def check_path(unit, path, tile, ignore_visibility=True):
     for step in path:

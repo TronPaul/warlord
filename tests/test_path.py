@@ -1,57 +1,85 @@
 from unittest import TestCase
 from mock import Mock, PropertyMock
 
+class MockTile(object):
+    def __init__(self):
+        self._up = None
+        self._down = None
+        self._left = None
+        self._right = None
+        self.unit = None
+
+    @property
+    def up(self):
+        if not self._up:
+            self._up = MockTile()
+        return self._up
+
+    @property
+    def down(self):
+        if not self._down:
+            self._down = MockTile()
+        return self._down
+
+    @property
+    def left(self):
+        if not self._left:
+            self._left = MockTile()
+        return self._left
+
+    @property
+    def right(self):
+        if not self._right:
+            self._right = MockTile()
+        return self._right
+
 class TestPath(TestCase):
     def setUp(self):
         self.unit = Mock()
-        self.unit.location = (0, 0)
-        self.tile = self._makeMockTile()
-
-    def _makeMockTile(self):
-        tile = Mock()
-        tilegen = PropertyMock(side_effect=self._makeMockTile)
-        type(tile).up = tilegen
-        type(tile).down = tilegen
-        type(tile).left = tilegen
-        type(tile).right = tilegen
-        type(tile).impassible = PropertyMock(return_value=False)
-        return tile
+        self.tile = MockTile()
+        self.unit.tile = self.tile
+        self.tile.unit = self.unit
 
     def test_path_up(self):
         from warlord.path import path
-        path(self.unit, ('U',), self.tile)
-        self.assertEqual(self.unit.location, (0, 1))
+        path(self.unit, ('U',))
+        self.assertEqual(self.unit.tile, self.tile.up)
+        self.assertEqual(self.tile.up.unit, self.unit)
 
     def test_path_down(self):
         from warlord.path import path
-        path(self.unit, ('D',), self.tile)
-        self.assertEqual(self.unit.location, (0, -1))
+        path(self.unit, ('D',))
+        self.assertEqual(self.unit.tile, self.tile.down)
+        self.assertEqual(self.tile.down.unit, self.unit)
 
     def test_path_left(self):
         from warlord.path import path
-        path(self.unit, ('L',), self.tile)
-        self.assertEqual(self.unit.location, (-1, 0))
+        path(self.unit, ('L',))
+        self.assertEqual(self.unit.tile, self.tile.left)
+        self.assertEqual(self.tile.left.unit, self.unit)
 
     def test_path_right(self):
         from warlord.path import path
-        path(self.unit, ('R',), self.tile)
-        self.assertEqual(self.unit.location, (1, 0))
+        path(self.unit, ('R',))
+        self.assertEqual(self.unit.tile, self.tile.right)
+        self.assertEqual(self.tile.right.unit, self.unit)
 
     def test_path_bad_direction(self):
         from warlord.path import path, BadDirectionError
-        self.assertRaises(BadDirectionError, path, self.unit, ('X',), self.tile)
+        self.assertRaises(BadDirectionError, path, self.unit, ('X',))
 
     def test_multi_direction_path(self):
         from warlord.path import path
-        path(self.unit, ('U', 'U', 'L', 'L', 'D', 'R', 'D', 'L', 'U'),
-                self.tile)
-        self.assertTrue(self.unit.location, (-2, 1))
+        path(self.unit, ('U', 'U', 'L', 'L', 'D', 'R', 'D', 'L', 'U'))
+        new_tile = self.tile.up.up.left.left.down.right.down.left.up
+        self.assertEquals(self.unit.tile, new_tile)
+        self.assertEqual(new_tile.unit, self.unit)
 
     def test_path_with_impassible_square(self):
         from warlord.path import path, ImpassibleTileError
         tile = Mock()
         self.unit.is_passible.return_value = False
-        self.assertRaises(ImpassibleTileError, path, self.unit, ('U',), tile)
+        self.assertRaises(ImpassibleTileError, path, self.unit, ('U',))
 
     def test_check_path_up(self):
         from warlord.path import check_path

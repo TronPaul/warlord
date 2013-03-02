@@ -5,7 +5,8 @@ class ItemNotInInventoryError(LookupError):
 
 class Unit(HasStats):
     def __init__(self):
-        self.location = (0, 0)
+        self.tile = None
+        self.team = 0
         self.level = 1
         self.experience = 0
         self.inventory = []
