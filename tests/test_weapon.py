@@ -1,4 +1,5 @@
 from unittest import TestCase
+from mock import Mock
 
 class TestWeapon(TestCase):
     def setUp(self):
@@ -10,3 +11,10 @@ class TestWeapon(TestCase):
 
     def test_default_accuracy(self):
         self.assertEquals(self.weapon.accuracy, 0)
+
+    def test_default_might(self):
+        self.assertEquals(self.weapon.might, 0)
+
+    def test_trinity_bonus_raises_not_implemented(self):
+        self.assertRaises(NotImplementedError, self.weapon.trinity_bonus,
+                Mock())

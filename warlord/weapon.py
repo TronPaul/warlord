@@ -5,3 +5,7 @@ class Weapon(LimitedUsesMixin, Item):
         super(Weapon, self).__init__()
         self.weight = 0
         self.accuracy = 0
+        self.might = 0
+
+    def trinity_bonus(self, otherWeapon):
+        raise NotImplementedError
