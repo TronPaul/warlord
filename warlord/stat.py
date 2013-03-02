@@ -55,9 +55,6 @@ class HasStats(object):
             return setattr(self.get_stat(name), val_type + 'value', value)
         return super(HasStats, self).__setattr__(name, value)
 
-    def has_stat(self, name):
-        return hasattr(self, self._stat_prefix + name)
-
     def get_stat(self, name):
         return self.__dict__[self._stat_prefix + name]
 
