@@ -43,7 +43,7 @@ class TestCombat(TestCase):
         self.assertEquals(calculate_physical_attack_power(unitA, unitB), 7)
 
     @patch('warlord.unit.calculate_magical_attack_power')
-    def test_attack_power(self, calc_mag_atk_pwr):
+    def test_attack_power_with_magical_item(self, calc_mag_atk_pwr):
         from warlord.unit import calculate_attack_power
         unitA = Mock()
         unitB = Mock()
@@ -52,7 +52,7 @@ class TestCombat(TestCase):
         calc_mag_atk_pwr.assert_called_once_with(unitA, unitB)
 
     @patch('warlord.unit.calculate_physical_attack_power')
-    def test_attack_power(self, calc_phys_atk_pwr):
+    def test_attack_power_with_physical_item(self, calc_phys_atk_pwr):
         from warlord.unit import calculate_attack_power
         unitA = Mock()
         unitB = Mock()
@@ -60,17 +60,67 @@ class TestCombat(TestCase):
         calculate_attack_power(unitA, unitB)
         calc_phys_atk_pwr.assert_called_once_with(unitA, unitB)
 
-    def test_damage_vs_unit(self):
-        from warlord.unit import calculate_damage
-        unit = Mock()
-        unit.strength = 1
-        self.assertEquals(calculate_damage(unit, unit), 1)
+    @patch('warlord.unit.calculate_physical_attack_power')
+    def test_physical_damage(self, calc_phys_atk_pwr):
+        from warlord.unit import calculate_physical_damage
+        unitA = Mock()
+        unitB = Mock()
+        unitB.defense = 0
+        calc_phys_atk_pwr.return_value = 0
+        self.assertEquals(calculate_physical_damage(unitA, unitB), 0)
+        calc_phys_atk_pwr.return_value = 1
+        self.assertEquals(calculate_physical_damage(unitA, unitB), 1)
+        unitB.defense = 1
+        self.assertEquals(calculate_physical_damage(unitA, unitB), 0)
 
-    def test_damage_vs_unit_with_strength(self):
+    @patch('warlord.unit.calculate_physical_attack_power')
+    def test_physical_damage_is_never_negative(self, calc_phys_atk_pwr):
+        from warlord.unit import calculate_physical_damage
+        unitA = Mock()
+        unitB = Mock()
+        unitB.defense = 1
+        calc_phys_atk_pwr.return_value = 0
+        self.assertEquals(calculate_physical_damage(unitA, unitB), 0)
+
+    @patch('warlord.unit.calculate_magical_attack_power')
+    def test_magical_damage(self, calc_mag_atk_pwr):
+        from warlord.unit import calculate_magical_damage
+        unitA = Mock()
+        unitB = Mock()
+        unitB.resistance = 0
+        calc_mag_atk_pwr.return_value = 0
+        self.assertEquals(calculate_magical_damage(unitA, unitB), 0)
+        calc_mag_atk_pwr.return_value = 1
+        self.assertEquals(calculate_magical_damage(unitA, unitB), 1)
+        unitB.resistance = 1
+        self.assertEquals(calculate_magical_damage(unitA, unitB), 0)
+
+    @patch('warlord.unit.calculate_magical_attack_power')
+    def test_magical_damage_is_never_negative(self, calc_mag_atk_pwr):
+        from warlord.unit import calculate_magical_damage
+        unitA = Mock()
+        unitB = Mock()
+        unitB.resistance = 1
+        calc_mag_atk_pwr.return_value = 0
+        self.assertEquals(calculate_magical_damage(unitA, unitB), 0)
+
+    @patch('warlord.unit.calculate_magical_damage')
+    def test_damage_with_magical_item(self, calc_mag_dmg):
         from warlord.unit import calculate_damage
-        unit = Mock()
-        unit.strength = 2
-        self.assertEqual(calculate_damage(unit, unit), 2)
+        unitA = Mock()
+        unitB = Mock()
+        unitA.equipped_item.type = 'magical'
+        calculate_damage(unitA, unitB)
+        calc_mag_dmg.assert_called_once_with(unitA, unitB)
+
+    @patch('warlord.unit.calculate_physical_damage')
+    def test_damage_with_physical_item(self, calc_phys_dmg):
+        from warlord.unit import calculate_damage
+        unitA = Mock()
+        unitB = Mock()
+        unitA.equipped_item.type = 'physical'
+        calculate_damage(unitA, unitB)
+        calc_phys_dmg.assert_called_once_with(unitA, unitB)
 
     def test_attack_count_vs_unit_with_same_speed(self):
         from warlord.unit import calculate_attack_count
