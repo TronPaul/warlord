@@ -8,12 +8,12 @@ class Unit(HasStats):
         self.location = (0, 0)
         self.level = 1
         self.experience = 0
-        self.speed = 0
-        self.strength = 0
         self.inventory = []
         self.equipped_item = None
 
         self.add_stat('health', min_value=0, max_value=0)
+        self.add_stat('strength')
+        self.add_stat('speed')
 
     def damage(self, amount):
         self.health -= amount
