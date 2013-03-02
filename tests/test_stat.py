@@ -36,50 +36,22 @@ class TestHasMinMixin(TestCase):
         self.stat.value -= 1
         self.assertEquals(self.stat.value, 0)
 
-class TestStatManager(TestCase):
+class TestHasStatsMixin(TestCase):
     def setUp(self):
-        from warlord.stat import StatManager
-        self.man = StatManager()
+        from warlord.stat import HasStats
+        class Statable(HasStats):
+            pass
+        self.statable = Statable()
 
     def test_add_stat(self):
-        self.man.add_stat('name')
-        self.assertEqual(self.man['name'], 0)
+        self.statable.add_stat('name')
+        self.assertTrue(hasattr(self.statable, 'name'))
+        self.assertEqual(self.statable.name, 0)
+        self.assertTrue(hasattr(self.statable, '_stat_name'))
+        self.assertEquals(self.statable._stat_name.value, 0)
 
-    def test_change_stat(self):
-        self.man.add_stat('name')
-        self.man['name'] = 1
-        self.assertEqual(self.man['name'], 1)
-
-    def test_add_min_stat(self):
-        self.man.add_stat('name', min_value=0)
-        self.assertEqual(self.man['name'], 0)
-        self.assertEqual(self.man['min_name'], 0)
-
-    def test_add_min_stat_follows_min(self):
-        self.man.add_stat('name', min_value=0)
-        self.man['name'] = -1
-        self.assertEqual(self.man['name'], 0)
-
-    def test_add_max_stat(self):
-        self.man.add_stat('name', max_value=0)
-        self.assertEqual(self.man['name'], 0)
-        self.assertEqual(self.man['max_name'], 0)
-
-    def test_add_max_stat_follows_max(self):
-        self.man.add_stat('name', max_value=0)
-        self.man['name'] = 1
-        self.assertEqual(self.man['name'], 0)
-
-    def test_add_min_max_stat(self):
-        self.man.add_stat('name', min_value=0, max_value=0)
-        self.assertEqual(self.man['name'], 0)
-
-    def test_add_min_max_stat_follows_min(self):
-        self.man.add_stat('name', min_value=0, max_value=0)
-        self.man['name'] = -1
-        self.assertEqual(self.man['name'], 0)
-
-    def test_add_min_max_stat_follows_max(self):
-        self.man.add_stat('name', min_value=0, max_value=0)
-        self.man['name'] = 1
-        self.assertEqual(self.man['name'], 0)
+    def test_setattr(self):
+        self.statable.add_stat('name')
+        self.statable.name = 1
+        self.assertEquals(self.statable.name, 1)
+        self.assertEquals(self.statable._stat_name.value, 1)

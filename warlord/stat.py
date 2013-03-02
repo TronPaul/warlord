@@ -32,33 +32,27 @@ class MinStat(HasMinMixin, Stat):
 class MinMaxStat(HasMinMixin, HasMaxMixin, Stat):
     pass
 
-class StatManager(object):
-    def __init__(self):
-        self.stats = {}
+class HasStats(object):
+    _stat_prefix = '_stat_'
+    def __getattr__(self, name):
+        if hasattr(self, self._stat_prefix + name):
+            stat = self.get_stat(name)
+            return stat.value
+        return super(HasStats, self).__getattr__(name)
 
-    def __getitem__(self, key):
-        if key.startswith('min_'):
-            key = key[4:]
-            return self.stats[key].min_value
-        elif key.startswith('max_'):
-            key = key[4:]
-            return self.stats[key].max_value
-        return self.stats[key].value
+    def __setattr__(self, name, value):
+        if hasattr(self, self._stat_prefix + name):
+            stat = self.get_stat(name)
+            stat.value = value
+            return
+        return super(HasStats, self).__setattr__(name, value)
 
-    def __setitem__(self, key, value):
-        self.stats[key].value = value
+    def has_stat(self, name):
+        return hasattr(self, self._stat_prefix + name)
 
-    def add_stat(self, name, max_value=None, min_value=None):
-        if min_value is not None and max_value is not None:
-            stat = MinMaxStat()
-            stat.min_value = min_value
-            stat.max_value = max_value
-        elif max_value is not None:
-            stat = MaxStat()
-            stat.max_value = max_value
-        elif min_value is not None:
-            stat = MinStat()
-            stat.min_value = min_value
-        else:
-            stat = Stat()
-        self.stats[name] = stat
+    def get_stat(self, name):
+        return self.__dict__[self._stat_prefix + name]
+
+    def add_stat(self, name):
+        stat = Stat()
+        setattr(self, self._stat_prefix + name, stat)
