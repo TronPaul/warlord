@@ -7,3 +7,6 @@ class TestWeapon(TestCase):
 
     def test_default_weight(self):
         self.assertEquals(self.weapon.weight, 0)
+
+    def test_default_accuracy(self):
+        self.assertEquals(self.weapon.accuracy, 0)
