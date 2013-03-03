@@ -27,10 +27,50 @@ class TestWeapon(TestCase):
     def test_default_countered_by_unit_types(self):
         self.assertEquals(self.weapon.countered_by_unit_types, [])
 
-    def test_weapon_counter_bonus_raises_not_implemented(self):
-        self.assertRaises(NotImplementedError, self.weapon.weapon_counter_bonus,
-                Mock())
+    def test_weapon_counter_bonus_with_countered_weapon(self):
+        self.weapon.countered_weapon_types.append('axe')
+        weaponB = Mock()
+        weaponB.type = 'axe'
+        self.assertEquals(self.weapon.weapon_counter_bonus(weaponB), 1)
 
-    def test_unit_counter_raises_not_implemented(self):
-        self.assertRaises(NotImplementedError, self.weapon.unit_counter_bonus,
-                Mock())
+    def test_weapon_counter_bonus_with_uncountered_weapon(self):
+        self.weapon.countered_weapon_types.append('axe')
+        weaponB = Mock()
+        weaponB.type = 'sword'
+        self.assertEquals(self.weapon.weapon_counter_bonus(weaponB), 0)
+
+    def test_weapon_counter_bonus_with_countered_by_weapon(self):
+        self.weapon.countered_by_weapon_types.append('axe')
+        weaponB = Mock()
+        weaponB.type = 'axe'
+        self.assertEquals(self.weapon.weapon_counter_bonus(weaponB), -1)
+
+    def test_weapon_counter_bonus_with_uncountered_by_weapon(self):
+        self.weapon.countered_by_weapon_types.append('axe')
+        weaponB = Mock()
+        weaponB.type = 'sword'
+        self.assertEquals(self.weapon.weapon_counter_bonus(weaponB), 0)
+
+    def test_unit_counter_bonus_with_countered_unit(self):
+        self.weapon.countered_unit_types.append('a')
+        unit = Mock()
+        unit.type = 'a'
+        self.assertEquals(self.weapon.unit_counter_bonus(unit), 1)
+
+    def test_unit_counter_bonus_with_uncountered_unit(self):
+        self.weapon.countered_unit_types.append('a')
+        unit = Mock()
+        unit.type = 'b'
+        self.assertEquals(self.weapon.unit_counter_bonus(unit), 0)
+
+    def test_unit_counter_bonus_with_countered_by_unit(self):
+        self.weapon.countered_by_unit_types.append('a')
+        unit = Mock()
+        unit.type = 'a'
+        self.assertEquals(self.weapon.unit_counter_bonus(unit), -1)
+
+    def test_unit_counter_bonus_with_uncountered_by_unit(self):
+        self.weapon.countered_by_unit_types.append('a')
+        unit = Mock()
+        unit.type = 'b'
+        self.assertEquals(self.weapon.unit_counter_bonus(unit), 0)

@@ -12,7 +12,17 @@ class Weapon(LimitedUsesMixin, Item):
         self.countered_by_unit_types = []
 
     def weapon_counter_bonus(self, weapon_other):
-        raise NotImplementedError
+        if weapon_other.type in self.countered_weapon_types:
+            return 1
+        elif weapon_other.type in self.countered_by_weapon_types:
+            return -1
+        else:
+            return 0
 
     def unit_counter_bonus(self, unit):
-        raise NotImplementedError
+        if unit.type in self.countered_unit_types:
+            return 1
+        elif unit.type in self.countered_by_unit_types:
+            return -1
+        else:
+            return 0
