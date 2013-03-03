@@ -11,6 +11,7 @@ class Unit(HasStats):
         self.experience = 0
         self.inventory = []
         self.equipped_item = None
+        self.passable_tile_types = []
 
         self.critical = 0
         self.add_stat('health', min_value=0, max_value=0)
@@ -58,8 +59,8 @@ class Unit(HasStats):
             raise ItemNotInInventoryError
         self.equipped_item = item
 
-    def is_passible(self, tile):
-        return tile is not None
+    def is_passable(self, tile):
+        return tile is not None and tile.type in self.passable_tile_types
 
     def is_visible(self, tile):
         raise NotImplementedError

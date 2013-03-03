@@ -9,7 +9,7 @@ class TestUnit(TestCase):
     def test_default_team(self):
         self.assertEqual(self.unit.team, 0)
 
-    def test_default_tile(self):
+    def test_default_tile_types(self):
         self.assertTrue(self.unit.tile is None)
 
     def test_default_critical(self):
@@ -41,6 +41,9 @@ class TestUnit(TestCase):
 
     def test_default_resistance(self):
         self.assertEquals(self.unit.resistance, 0)
+
+    def test_default_passable_tile_types(self):
+        self.assertEquals(self.unit.passable_tile_types, [])
 
     def test_evade(self):
         self.unit.speed = 1
@@ -130,12 +133,25 @@ class TestUnit(TestCase):
         item = Mock()
         self.assertRaises(ItemNotInInventoryError, self.unit.equip_item, item)
 
-    def test_is_passible(self):
+    def test_is_passable_with_no_passable_tiles(self):
         tile = Mock()
-        self.assertTrue(self.unit.is_passible(tile))
+        tile.type = 'type'
+        self.assertTrue(not self.unit.is_passable(tile))
 
-    def test_is_passible_without_tile(self):
-        self.assertTrue(not self.unit.is_passible(None))
+    def test_is_passable_with_a_passable_tile(self):
+        tile = Mock()
+        tile.type = 'type'
+        self.unit.passable_tile_types.append('type')
+        self.assertTrue(self.unit.is_passable(tile))
+
+    def test_is_passable_with_a_unpassable_tile(self):
+        tile = Mock()
+        tile.type = 'type'
+        self.unit.passable_tile_types.append('nope')
+        self.assertTrue(not self.unit.is_passable(tile))
+
+    def test_is_passable_without_tile(self):
+        self.assertTrue(not self.unit.is_passable(None))
 
     def test_is_visible_raises_not_implemented(self):
         tile = Mock()
@@ -160,6 +176,7 @@ class TestUnit(TestCase):
         self.unit.level = 2
         self.unit.add_experience(100)
         self.assertEquals(self.unit.level, 3)
+
     def test_add_experience_with_level_up_and_extra_levels_up_with_extra_exp(self):
         self.unit.add_experience(101)
         self.assertEquals(self.unit.experience, 1)
