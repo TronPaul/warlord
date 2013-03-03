@@ -15,6 +15,12 @@ class TestTile(TestCase):
     def test_default_unit(self):
         self.assertTrue(self.tile.unit is None)
 
+    def test_default_references(self):
+        self.assertTrue(self.tile.up is None)
+        self.assertTrue(self.tile.down is None)
+        self.assertTrue(self.tile.left is None)
+        self.assertTrue(self.tile.right is None)
+
     def test_contains(self):
         unit = Mock()
         self.tile.unit = unit
