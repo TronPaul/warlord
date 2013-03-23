@@ -152,9 +152,27 @@ class TestCombat(TestCase):
         unitB.speed = 0
         self.assertEqual(calculate_attack_count(unitA, unitB), 2)
 
+    def test_combat_raises_out_of_range_when_not_in_range(self):
+        from warlord.combat import UnitOutOfRangeError, combat
+        unitA = Mock()
+        unitB = Mock()
+        weapon = Mock()
+        weapon.attack_range = [0]
+        unitA.equipped_item = weapon
+        tileA = Mock()
+        tileA.location = (0, 0)
+        tileA.unit = unitA
+        unitA.tile = tileA
+        tileB = Mock()
+        tileB.location = (0, 2)
+        tileB.unit = unitB
+        unitB.tile = tileB
+        self.assertRaises(UnitOutOfRangeError, combat, unitA, unitB)
+
     @patch('warlord.combat.calculate_attack_count')
     @patch('warlord.combat.calculate_damage')
-    def test_combat(self, calc_atk_cnt, calc_dmg):
+    @patch('warlord.combat.is_in_range')
+    def test_combat(self, calc_atk_cnt, calc_dmg, in_rng):
         from warlord.combat import combat
         unitA = Mock()
         unitB = Mock()
@@ -162,13 +180,15 @@ class TestCombat(TestCase):
         unitB.health = 99
         calc_atk_cnt.return_value = 1
         calc_dmg.return_value = 1
+        in_rng.return_value = True
         combat(unitA, unitB)
         self.assertEqual(unitA.health, 98)
         self.assertEqual(unitB.health, 98)
 
     @patch('warlord.combat.calculate_attack_count')
     @patch('warlord.combat.calculate_damage')
-    def test_combat_with_dead_units_does_nothing(self, calc_atk_cnt, calc_dmg):
+    @patch('warlord.combat.is_in_range')
+    def test_combat_with_dead_units_does_nothing(self, calc_atk_cnt, calc_dmg, in_rng):
         from warlord.combat import combat
         unitA = Mock()
         unitB = Mock()
@@ -176,13 +196,16 @@ class TestCombat(TestCase):
         unitB.health = 0
         calc_atk_cnt.return_value = 1
         calc_dmg.return_value = 1
+        in_rng.return_value = True
         combat(unitA, unitB)
         self.assertEqual(unitA.health, 0)
         self.assertEqual(unitB.health, 0)
 
     @patch('warlord.combat.calculate_attack_count')
     @patch('warlord.combat.calculate_damage')
-    def test_combat_where_unit_death_stops_combat(self, calc_atk_cnt, calc_dmg):
+    @patch('warlord.combat.is_in_range')
+    def test_combat_where_unit_death_stops_combat(self, calc_atk_cnt,
+            calc_dmg, in_rng):
         from warlord.combat import combat
         unitA = Mock()
         unitB = Mock()
@@ -190,6 +213,7 @@ class TestCombat(TestCase):
         unitB.health = 1
         calc_atk_cnt.return_value = 1
         calc_dmg.return_value = 1
+        in_rng.return_value = True
         combat(unitA, unitB)
         self.assertEqual(unitA.health, 99)
         self.assertEqual(unitB.health, 0)

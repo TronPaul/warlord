@@ -40,6 +40,14 @@ class TestPath(TestCase):
         self.unit.tile = self.tile
         self.tile.unit = self.unit
 
+    def test_distance(self):
+        from warlord.path import distance
+        tileA = Mock()
+        tileB = Mock()
+        tileA.location = (0, 0)
+        tileB.location = (0, 1)
+        self.assertEquals(distance(tileA, tileB), 1)
+
     def test_path_up(self):
         from warlord.path import path
         path(self.unit, ('U',))

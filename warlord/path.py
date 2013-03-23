@@ -4,6 +4,9 @@ class BadDirectionError(ValueError):
 class ImpassibleTileError(ValueError):
     pass
 
+def distance(tileA, tileB):
+    return sum(sum(comb) for comb in zip(tileA.location, tileB.location))
+
 def check_step(unit, step, tile, ignore_visibility=True):
     if step == 'U':
         return unit.is_passible(tile.up) or not unit.is_visible(tile.up)

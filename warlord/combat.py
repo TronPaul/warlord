@@ -1,3 +1,12 @@
+from warlord.path import distance
+
+class UnitOutOfRangeError(ValueError):
+    pass
+
+def is_in_range(unitA, unitB):
+    dist = distance(unitA.tile, unitB.tile) - 1
+    return dist in unitA.equipped_item.attack_range
+
 def calculate_attack_power(unitA, unitB):
     if unitA.equipped_item.type == 'magical':
         return calculate_magical_attack_power(unitA, unitB)
@@ -40,6 +49,8 @@ def calculate_attack_count(unitA, unitB):
     return 2 if dif > 3 else 1
 
 def combat(unitA, unitB):
+    if not is_in_range(unitA, unitB):
+        raise UnitOutOfRangeError
     units = (unitA, unitB)
     attack_counts = (calculate_attack_count(unitA, unitB),
                      calculate_attack_count(unitB, unitA))

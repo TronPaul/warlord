@@ -15,6 +15,9 @@ class TestWeapon(TestCase):
     def test_default_might(self):
         self.assertEquals(self.weapon.might, 0)
 
+    def test_default_attack_range(self):
+        self.assertEquals(self.weapon.attack_range, [])
+
     def test_default_countered_weapon_types(self):
         self.assertEquals(self.weapon.countered_weapon_types, [])
 
