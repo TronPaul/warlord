@@ -221,3 +221,18 @@ class TestCombat(TestCase):
         combat(unitA, unitB)
         self.assertEqual(unitA.health, 99)
         self.assertEqual(unitB.health, 0)
+
+    @patch('warlord.combat.do_combat_round')
+    def test_combat_loop_changes_attack_count_when_out_of_uses(self,
+            do_cmbt_rnd):
+        from warlord.combat import do_combat_loop
+        unitA = Mock()
+        unitB = Mock()
+        unitA.equipped_item.uses = 1
+        atk_cnts = [99, 0]
+        def side_effect(*args, **kwargs):
+            unitA.equipped_item.uses -= 1
+        do_cmbt_rnd.side_effect = side_effect
+        do_combat_loop([unitA, unitB], atk_cnts)
+        self.assertEquals(do_cmbt_rnd.call_count, 1)
+        self.assertEquals(atk_cnts, [0, 0])

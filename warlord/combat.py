@@ -13,6 +13,8 @@ def combat(unitA, unitB):
 def do_combat_loop(units, attack_counts):
     while does_combat_continue(units, attack_counts):
         do_combat_round(units, attack_counts)
+        if units[0].equipped_item.uses < 1:
+            attack_counts[0] = 0
         if attack_counts[1] > 0:
             units.reverse()
             attack_counts.reverse()
