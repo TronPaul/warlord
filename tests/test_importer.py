@@ -5,9 +5,9 @@ class TestImporter(TestCase):
     def test_import_simple_map(self):
         from json import dumps
         from warlord.importer import import_map
-        tile_map_json = dumps([
+        tile_map = [
                 [0,1],
-                [0,0]])
+                [0,0]]
         tileA_1 = Mock()
         tileA_1.up = None
         tileA_1.down = None
@@ -37,7 +37,7 @@ class TestImporter(TestCase):
         tileA_factory_mock = Mock(side_effect=tileA_factory)
         tileB_factory_mock = Mock(side_effect=tileB_factory)
         tile_factory_list = [tileA_factory_mock, tileB_factory_mock]
-        tile_map = import_map(tile_map_json, tile_factory_list)
+        tile_map = import_map(tile_map, tile_factory_list)
         self.assertEquals(tile_map, [
             [tileA_1, tileB_1],
             [tileA_2, tileA_3]])
@@ -63,19 +63,26 @@ class TestImporter(TestCase):
         self.assertTrue(tileA_3.right is None)
 
     def test_import_tile_factory(self):
-        from json import dumps
         from warlord.importer import import_tile_factory
-        tile_defn_json = dumps({
+        tile_defn = {
             'type':'plains'
-            })
-        tile_factory = import_tile_factory(tile_defn_json)
+            }
+        tile_factory = import_tile_factory(tile_defn)
         tile = tile_factory()
         self.assertEquals(tile.type, 'plains')
 
+    def test_import_simple_item(self):
+        pass
+
+    def test_import_potion(self):
+        pass
+
+    def test_import_simple_weapon(self):
+        pass
+
     def test_import_simple_unit(self):
-        from json import dumps
         from warlord.importer import import_unit
-        unit_defn_json = dumps({
+        unit_defn = {
             'level':2,
             'experience':1,
             'passable_tile_types':[],
@@ -89,8 +96,8 @@ class TestImporter(TestCase):
             'skill':1,
             'defense':1,
             'resistance':1
-        })
-        unit = import_unit(unit_defn_json)
+        }
+        unit = import_unit(unit_defn)
         self.assertEquals(unit.level, 2)
         self.assertEquals(unit.experience, 1)
         self.assertEquals(unit.inventory, [])

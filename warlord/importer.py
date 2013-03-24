@@ -1,10 +1,7 @@
-from json import loads
-
 class BadUnitAttributeError(LookupError):
     pass
 
-def import_map(tile_num_map_json, tile_factory_list):
-    tile_num_map = loads(tile_num_map_json)
+def import_map(tile_num_map, tile_factory_list):
     tile_map = []
     for i, tile_num_row in enumerate(tile_num_map):
         tile_row = []
@@ -23,18 +20,16 @@ def import_map(tile_num_map_json, tile_factory_list):
             tile_row.append(tile)
     return tile_map
 
-def import_tile_factory(tile_defn_json):
+def import_tile_factory(tile_defn):
     from warlord.tile import Tile
-    tile_defn = loads(tile_defn_json)
     def tile_factory():
         tile = Tile()
         tile.type = tile_defn['type']
         return tile
     return tile_factory
 
-def import_unit(unit_defn_json):
+def import_unit(unit_defn):
     from warlord.unit import Unit
-    unit_defn = loads(unit_defn_json)
     unit = Unit()
     items = unit_defn.pop('items', [])
     if items:
