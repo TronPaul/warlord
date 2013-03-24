@@ -1,4 +1,5 @@
 from stat import HasStats
+from effect import HasEffects
 
 class ItemNotInInventoryError(LookupError):
     pass
@@ -6,8 +7,9 @@ class ItemNotInInventoryError(LookupError):
 class ItemNotEquipableError(ValueError):
     pass
 
-class Unit(HasStats):
+class Unit(HasStats, HasEffects):
     def __init__(self):
+        super(Unit, self).__init__()
         self.tile = None
         self.team = 0
         self.level = 1
@@ -57,6 +59,7 @@ class Unit(HasStats):
 
     def remove_item(self, item):
         self.inventory.remove(item)
+        item.owner = None
 
     def equip_item(self, item):
         if item not in self.inventory:

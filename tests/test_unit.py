@@ -119,9 +119,11 @@ class TestUnit(TestCase):
 
     def test_remove_item(self):
         item = Mock()
+        item.owner = self.unit
         self.unit.inventory.append(item)
         self.unit.remove_item(item)
         self.assertEqual(len(self.unit.inventory), 0)
+        self.assertTrue(item.owner is None)
 
     def test_equip_item(self):
         item = Mock()
@@ -140,6 +142,20 @@ class TestUnit(TestCase):
         item.equipable = False
         self.unit.inventory.append(item)
         self.assertRaises(ItemNotEquipableError, self.unit.equip_item, item)
+
+    def test_add_effect(self):
+        effect = Mock()
+        self.unit.add_effect(effect)
+        self.assertTrue(effect in self.unit.effects)
+        self.assertEquals(effect.target, self.unit)
+
+    def test_remove_effect(self):
+        effect = Mock()
+        effect.target = self.unit
+        self.unit.effects.append(effect)
+        self.unit.remove_effect(effect)
+        self.assertEquals(len(self.unit.effects), 0)
+        self.assertTrue(effect.target is None)
 
     def test_is_passable_with_no_passable_tiles(self):
         tile = Mock()
