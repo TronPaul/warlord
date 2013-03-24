@@ -26,6 +26,10 @@ def get_attack_counts(unitA, unitB):
     return [calculate_attack_count(unitA, unitB),
              calculate_attack_count(unitB, unitA)]
 
+def calculate_attack_count(unitA, unitB):
+    dif = unitA.speed - unitB.speed
+    return 2 if dif > 3 else 1
+
 def does_combat_continue(units, attack_counts):
     return (any([c > 0 for c in attack_counts]) and
             all([u.health > 0 for u in units]))
@@ -66,7 +70,3 @@ def calculate_physical_damage(unitA, unitB):
 def calculate_magical_damage(unitA, unitB):
     return max(calculate_magical_attack_power(unitA, unitB) - unitB.resistance,
             0)
-
-def calculate_attack_count(unitA, unitB):
-    dif = unitA.speed - unitB.speed
-    return 2 if dif > 3 else 1

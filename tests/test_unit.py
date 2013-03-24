@@ -133,6 +133,13 @@ class TestUnit(TestCase):
         item = Mock()
         self.assertRaises(ItemNotInInventoryError, self.unit.equip_item, item)
 
+    def test_equip_item_item_not_equipable(self):
+        from warlord.unit import ItemNotEquipableError
+        item = Mock()
+        item.equipable = False
+        self.unit.inventory.append(item)
+        self.assertRaises(ItemNotEquipableError, self.unit.equip_item, item)
+
     def test_is_passable_with_no_passable_tiles(self):
         tile = Mock()
         tile.type = 'type'

@@ -2,6 +2,7 @@ class Item(object):
     def __init__(self):
         self.name = ''
         self.value = 0
+        self.equipable = False
         super(Item, self).__init__()
 
 class IsUsableMixin(object):

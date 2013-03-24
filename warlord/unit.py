@@ -3,6 +3,9 @@ from stat import HasStats
 class ItemNotInInventoryError(LookupError):
     pass
 
+class ItemNotEquipableError(ValueError):
+    pass
+
 class Unit(HasStats):
     def __init__(self):
         self.tile = None
@@ -57,6 +60,8 @@ class Unit(HasStats):
     def equip_item(self, item):
         if item not in self.inventory:
             raise ItemNotInInventoryError
+        if not item.equipable:
+            raise ItemNotEquipableError
         self.equipped_item = item
 
     def is_passable(self, tile):

@@ -7,6 +7,7 @@ class Weapon(LimitedUsesMixin, Item):
         self.accuracy = 0
         self.might = 0
         self.attack_range = []
+        self.equipable = True
 
         self.countered_weapon_types = []
         self.countered_by_weapon_types = []
