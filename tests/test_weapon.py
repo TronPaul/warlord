@@ -1,19 +1,24 @@
 from unittest import TestCase
 from mock import Mock, patch
 
+class TestEquipableItem(TestCase):
+    def setUp(self):
+        from warlord.weapon import EquipableItem
+        self.item = EquipableItem()
+
+    def test_default_weight(self):
+        self.assertEquals(self.item.weight, 0)
+
+    def test_default_accuracy(self):
+        self.assertEquals(self.item.accuracy, 0)
+
+    def test_default_might(self):
+        self.assertEquals(self.item.might, 0)
+
 class TestWeapon(TestCase):
     def setUp(self):
         from warlord.weapon import Weapon
         self.weapon = Weapon()
-
-    def test_default_weight(self):
-        self.assertEquals(self.weapon.weight, 0)
-
-    def test_default_accuracy(self):
-        self.assertEquals(self.weapon.accuracy, 0)
-
-    def test_default_might(self):
-        self.assertEquals(self.weapon.might, 0)
 
     def test_default_attack_range(self):
         self.assertEquals(self.weapon.attack_range, [])
@@ -87,3 +92,26 @@ class TestWeapon(TestCase):
         calc_dmg.return_value = 1
         self.weapon.use(target)
         self.assertEquals(target.health, 0)
+
+class TestStaff(TestCase):
+    def setUp(self):
+        from warlord.weapon import Staff
+        self.staff = Staff()
+
+    def test_default_cast_range(self):
+        self.assertEquals(self.staff.cast_range, [])
+
+    def test_default_base_healing(self):
+        self.assertEquals(self.staff.base_healing, 0)
+
+    def test_healing_amount(self):
+        unit = Mock()
+        unit.magic = 0
+        self.staff.owner = unit
+        self.assertEquals(self.staff.healing_amount, 0)
+        unit.magic = 1
+        self.assertEquals(self.staff.healing_amount, 1)
+        self.staff.might = 1
+        self.assertEquals(self.staff.healing_amount, 2)
+        self.staff.base_healing = 1
+        self.assertEquals(self.staff.healing_amount, 3)

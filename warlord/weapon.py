@@ -1,14 +1,32 @@
 from item import Item, LimitedUsesMixin
 from combat import calculate_damage
 
-class Weapon(LimitedUsesMixin, Item):
+class EquipableItem(Item):
     def __init__(self):
-        super(Weapon, self).__init__()
+        super(EquipableItem, self).__init__()
         self.weight = 0
         self.accuracy = 0
         self.might = 0
-        self.attack_range = []
         self.equipable = True
+
+class Staff(LimitedUsesMixin, EquipableItem):
+    def __init__(self):
+        super(Staff, self).__init__()
+        self.base_healing = 0
+        self.cast_range = []
+
+    @property
+    def healing_amount(self):
+        return self.owner.magic + self.might + self.base_healing
+
+    def use(self, target):
+        super(Staff, self).use(target)
+        target.health += self.healing_amount
+
+class Weapon(LimitedUsesMixin, EquipableItem):
+    def __init__(self):
+        super(Weapon, self).__init__()
+        self.attack_range = []
 
         self.countered_weapon_types = []
         self.countered_by_weapon_types = []
