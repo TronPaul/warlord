@@ -134,13 +134,6 @@ class TestPath(TestCase):
         self.unit.is_passible.return_value = False
         self.assertTrue(not check_step(self.unit, 'U', self.tile))
 
-    def test_check_step_with_visibility(self):
-        from warlord.path import check_step
-        self.unit.is_passible.return_value = False
-        self.unit.is_visible.return_value = False
-        self.assertTrue(check_step(self.unit, 'U', self.tile,
-            ignore_visibility=True))
-
     def test_check_multi_direction_path(self):
         from warlord.path import check_path
         self.assertTrue(check_path(self.unit,
@@ -151,11 +144,3 @@ class TestPath(TestCase):
         tile = Mock()
         self.unit.is_passible.return_value = False
         self.assertTrue(not check_path(self.unit, ('U',), tile))
-
-    def test_check_path_with_visibility(self):
-        from warlord.path import check_path
-        tile = Mock()
-        self.unit.is_passible.return_value = False
-        self.unit.is_visible.return_value = False
-        self.assertTrue(check_path(self.unit, ('U',), tile,
-            ignore_visibility=True))

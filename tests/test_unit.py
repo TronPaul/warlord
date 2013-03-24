@@ -161,10 +161,6 @@ class TestUnit(TestCase):
     def test_is_passable_without_tile(self):
         self.assertTrue(not self.unit.is_passable(None))
 
-    def test_is_visible_raises_not_implemented(self):
-        tile = Mock()
-        self.assertRaises(NotImplementedError, self.unit.is_visible, tile)
-
     def test_default_experience(self):
         self.assertEquals(self.unit.experience, 0)
 

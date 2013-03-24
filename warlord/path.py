@@ -23,9 +23,9 @@ def path(unit, path):
     tile.unit = unit
     unit.tile = tile
 
-def check_path(unit, path, tile, ignore_visibility=True):
+def check_path(unit, path, tile):
     for step in path:
-        if not check_step(unit, step, tile, ignore_visibility):
+        if not check_step(unit, step, tile):
             return False
         if step == 'U':
             tile = tile.up
@@ -37,14 +37,14 @@ def check_path(unit, path, tile, ignore_visibility=True):
             tile = tile.left
     return True
 
-def check_step(unit, step, tile, ignore_visibility=True):
+def check_step(unit, step, tile):
     if step == 'U':
-        return unit.is_passible(tile.up) or not unit.is_visible(tile.up)
+        return unit.is_passible(tile.up)
     elif step == 'D':
-        return unit.is_passible(tile.down) or not unit.is_visible(tile.down)
+        return unit.is_passible(tile.down)
     elif step == 'R':
-        return unit.is_passible(tile.right) or not unit.is_visible(tile.right)
+        return unit.is_passible(tile.right)
     elif step == 'L':
-        return unit.is_passible(tile.left) or not unit.is_visible(tile.left)
+        return unit.is_passible(tile.left)
     else:
         raise BadDirectionError

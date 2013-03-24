@@ -68,9 +68,6 @@ class Unit(HasStats):
     def is_passable(self, tile):
         return tile is not None and tile.type in self.passable_tile_types
 
-    def is_visible(self, tile):
-        raise NotImplementedError
-
     def add_experience(self, experience):
         self.experience += experience
         if self.experience >= 100:
