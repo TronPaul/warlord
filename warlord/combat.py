@@ -8,15 +8,20 @@ def combat(unitA, unitB):
         raise UnitOutOfRangeError
     units = [unitA, unitB]
     attack_counts = get_attack_counts(unitA, unitB)
+    do_combat_loop(units, attack_counts)
 
+def do_combat_loop(units, attack_counts):
     while does_combat_continue(units, attack_counts):
-        attacker = units[0]
-        defender = units[1]
-        defender.health -= calculate_damage(attacker, defender)
-        attack_counts[0] -= 1
+        do_combat_round(units, attack_counts)
         if attack_counts[1] > 0:
             units.reverse()
             attack_counts.reverse()
+
+def do_combat_round(units, attack_counts):
+    attacker = units[0]
+    defender = units[1]
+    defender.health -= calculate_damage(attacker, defender)
+    attack_counts[0] -= 1
 
 def is_in_range(unitA, unitB):
     dist = distance(unitA.tile, unitB.tile) - 1
