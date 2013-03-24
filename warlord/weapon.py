@@ -1,4 +1,5 @@
 from item import Item, LimitedUsesMixin
+from combat import calculate_damage
 
 class Weapon(LimitedUsesMixin, Item):
     def __init__(self):
@@ -29,3 +30,7 @@ class Weapon(LimitedUsesMixin, Item):
             return -1
         else:
             return 0
+
+    def use(self, target):
+        super(Weapon, self).use(target)
+        target.health -= calculate_damage(self.owner, target)

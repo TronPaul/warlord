@@ -35,9 +35,8 @@ def do_combat_loop(units, attack_counts):
 def do_combat_round(units, attack_counts):
     attacker = units[0]
     defender = units[1]
-    defender.health -= calculate_damage(attacker, defender)
+    attacker.equipped_item.use(units[1])
     attack_counts[0] -= 1
-    attacker.equipped_item.use()
 
 def does_combat_continue(units, attack_counts):
     return (any([c > 0 for c in attack_counts]) and

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from mock import Mock
+from mock import Mock, patch
 
 class TestWeapon(TestCase):
     def setUp(self):
@@ -77,3 +77,13 @@ class TestWeapon(TestCase):
         unit = Mock()
         unit.type = 'b'
         self.assertEquals(self.weapon.unit_counter_bonus(unit), 0)
+
+    @patch('warlord.weapon.calculate_damage')
+    def test_use(self, calc_dmg):
+        self.weapon.owner = Mock()
+        self.weapon.uses = 1
+        target = Mock()
+        target.health = 1
+        calc_dmg.return_value = 1
+        self.weapon.use(target)
+        self.assertEquals(target.health, 0)
