@@ -169,56 +169,43 @@ class TestCombat(TestCase):
         unitB.tile = tileB
         self.assertRaises(UnitOutOfRangeError, combat, unitA, unitB)
 
-    @patch('warlord.combat.calculate_attack_count')
-    @patch('warlord.combat.calculate_damage')
-    @patch('warlord.combat.is_in_range')
-    def test_combat(self, calc_atk_cnt, calc_dmg, in_rng):
-        from warlord.combat import combat
+    @patch('warlord.combat.do_combat_round')
+    def test_combat_loop(self, do_cmbt_rnd):
+        from warlord.combat import do_combat_loop
         unitA = Mock()
         unitB = Mock()
         unitA.health = 99
         unitB.health = 99
-        unitA.equipped_item.uses = 99
-        unitB.equipped_item.uses = 99
-        calc_atk_cnt.return_value = 1
-        calc_dmg.return_value = 1
-        in_rng.return_value = True
-        combat(unitA, unitB)
+        atk_cnts = [1, 1]
+        def cmbt_rnd(units, *args, **kwargs):
+            units[1].health -= 1
+            atk_cnts[0] -= 1
+        do_cmbt_rnd.side_effect = cmbt_rnd
+        do_combat_loop([unitA, unitB], atk_cnts)
         self.assertEqual(unitA.health, 98)
         self.assertEqual(unitB.health, 98)
 
-    @patch('warlord.combat.calculate_attack_count')
-    @patch('warlord.combat.calculate_damage')
-    @patch('warlord.combat.is_in_range')
-    def test_combat_with_dead_units_does_nothing(self, calc_atk_cnt, calc_dmg, in_rng):
-        from warlord.combat import combat
+    def test_combat_loop_with_dead_units_does_nothing(self):
+        from warlord.combat import do_combat_loop
         unitA = Mock()
         unitB = Mock()
         unitA.health = 0
         unitB.health = 0
-        calc_atk_cnt.return_value = 1
-        calc_dmg.return_value = 1
-        in_rng.return_value = True
-        combat(unitA, unitB)
+        do_combat_loop([unitA, unitB], [1, 1])
         self.assertEqual(unitA.health, 0)
         self.assertEqual(unitB.health, 0)
 
-    @patch('warlord.combat.calculate_attack_count')
-    @patch('warlord.combat.calculate_damage')
-    @patch('warlord.combat.is_in_range')
-    def test_combat_where_unit_death_stops_combat(self, calc_atk_cnt,
-            calc_dmg, in_rng):
-        from warlord.combat import combat
+    @patch('warlord.combat.do_combat_round')
+    def test_combat_loop_where_unit_death_stops_combat(self, do_cmbt_rnd):
+        from warlord.combat import do_combat_loop
         unitA = Mock()
         unitB = Mock()
         unitA.health = 99
         unitB.health = 1
-        unitA.equipped_item.uses = 99
-        unitB.equipped_item.uses = 99
-        calc_atk_cnt.return_value = 1
-        calc_dmg.return_value = 1
-        in_rng.return_value = True
-        combat(unitA, unitB)
+        def dec_health(*args, **kwargs):
+            unitB.health -= 1
+        do_cmbt_rnd.side_effect = dec_health
+        do_combat_loop([unitA, unitB], [99, 99])
         self.assertEqual(unitA.health, 99)
         self.assertEqual(unitB.health, 0)
 
