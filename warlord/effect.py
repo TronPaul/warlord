@@ -8,6 +8,11 @@ class Effect(object):
             cur_value = getattr(self.target, stat)
             setattr(self.target, stat, cur_value + modifier)
 
+    def remove_effect(self):
+        for stat, modifier in self.stats:
+            cur_value = getattr(self.target, stat)
+            setattr(self.target, stat, cur_value - modifier)
+
 class RecurringEffect(Effect):
     def __init__(self):
         super(RecurringEffects, self).__init__()
