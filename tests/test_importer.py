@@ -71,3 +71,38 @@ class TestImporter(TestCase):
         tile_factory = import_tile_factory(tile_defn_json)
         tile = tile_factory()
         self.assertEquals(tile.type, 'plains')
+
+    def test_import_simple_unit(self):
+        from json import dumps
+        from warlord.importer import import_unit
+        unit_defn_json = dumps({
+            'level':2,
+            'experience':1,
+            'passable_tile_types':[],
+            'critical':1,
+            'max_health':1,
+            'health':1,
+            'strength':1,
+            'magic':1,
+            'speed':1,
+            'luck':1,
+            'skill':1,
+            'defense':1,
+            'resistance':1
+        })
+        unit = import_unit(unit_defn_json)
+        self.assertEquals(unit.level, 2)
+        self.assertEquals(unit.experience, 1)
+        self.assertEquals(unit.inventory, [])
+        self.assertEquals(unit.equipped_item, None)
+        self.assertEquals(unit.passable_tile_types, [])
+        self.assertEquals(unit.critical, 1)
+        self.assertEquals(unit.max_health, 1)
+        self.assertEquals(unit.health, 1)
+        self.assertEquals(unit.strength, 1)
+        self.assertEquals(unit.magic, 1)
+        self.assertEquals(unit.speed, 1)
+        self.assertEquals(unit.luck, 1)
+        self.assertEquals(unit.skill, 1)
+        self.assertEquals(unit.defense, 1)
+        self.assertEquals(unit.resistance, 1)

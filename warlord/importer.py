@@ -1,4 +1,8 @@
 from json import loads
+
+class BadUnitAttributeError(LookupError):
+    pass
+
 def import_map(tile_num_map_json, tile_factory_list):
     tile_num_map = loads(tile_num_map_json)
     tile_map = []
@@ -27,3 +31,33 @@ def import_tile_factory(tile_defn_json):
         tile.type = tile_defn['type']
         return tile
     return tile_factory
+
+def import_unit(unit_defn_json):
+    from warlord.unit import Unit
+    unit_defn = loads(unit_defn_json)
+    unit = Unit()
+    items = unit_defn.pop('items', [])
+    if items:
+        pass
+    equipped_item = unit_defn.pop('equipped_item', None)
+    if equipped_item:
+        pass
+    attrs = unit_defn.keys()
+    def attr_cmp(x, y):
+        if x.startswith('max_') or x.startswith('min_'):
+            if y.startswith('max_') or y.startswith('min_'):
+                return cmp(x, y)
+            else:
+                return -1
+        else:
+            if y.startswith('max_') or y.startswith('min_'):
+                return 1
+            else:
+                return cmp(x, y)
+    attrs = sorted(attrs, attr_cmp)
+    for attr in attrs:
+        val = unit_defn[attr]
+        if not hasattr(unit, attr):
+            raise BadUnitAttributeError
+        setattr(unit, attr, val)
+    return unit
