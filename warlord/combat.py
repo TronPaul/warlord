@@ -50,14 +50,14 @@ def calculate_physical_attack_power(unitA, unitB):
         weaponA.weapon_counter_bonus(weaponB),
         weaponA.unit_counter_bonus(unitB))
 
+def base_attack_power(atk_stat, might, weapon_counter, unit_counter):
+    return atk_stat + (might + weapon_counter) * (unit_counter + 1)
+
 def calculate_damage(unitA, unitB):
     if unitA.equipped_item.type == 'magical':
         return calculate_magical_damage(unitA, unitB)
     elif unitA.equipped_item.type == 'physical':
         return calculate_physical_damage(unitA, unitB)
-
-def base_attack_power(atk_stat, might, weapon_counter, unit_counter):
-    return atk_stat + (might + weapon_counter) * (unit_counter + 1)
 
 def calculate_physical_damage(unitA, unitB):
     return max(calculate_physical_attack_power(unitA, unitB) - unitB.defense,

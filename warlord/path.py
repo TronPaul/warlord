@@ -7,18 +7,6 @@ class ImpassibleTileError(ValueError):
 def distance(tileA, tileB):
     return sum(sum(comb) for comb in zip(tileA.location, tileB.location))
 
-def check_step(unit, step, tile, ignore_visibility=True):
-    if step == 'U':
-        return unit.is_passible(tile.up) or not unit.is_visible(tile.up)
-    elif step == 'D':
-        return unit.is_passible(tile.down) or not unit.is_visible(tile.down)
-    elif step == 'R':
-        return unit.is_passible(tile.right) or not unit.is_visible(tile.right)
-    elif step == 'L':
-        return unit.is_passible(tile.left) or not unit.is_visible(tile.left)
-    else:
-        raise BadDirectionError
-
 def path(unit, path):
     tile = unit.tile
     for step in path:
@@ -48,3 +36,15 @@ def check_path(unit, path, tile, ignore_visibility=True):
         elif step == 'L':
             tile = tile.left
     return True
+
+def check_step(unit, step, tile, ignore_visibility=True):
+    if step == 'U':
+        return unit.is_passible(tile.up) or not unit.is_visible(tile.up)
+    elif step == 'D':
+        return unit.is_passible(tile.down) or not unit.is_visible(tile.down)
+    elif step == 'R':
+        return unit.is_passible(tile.right) or not unit.is_visible(tile.right)
+    elif step == 'L':
+        return unit.is_passible(tile.left) or not unit.is_visible(tile.left)
+    else:
+        raise BadDirectionError
