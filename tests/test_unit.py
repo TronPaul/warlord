@@ -6,9 +6,6 @@ class TestUnit(TestCase):
         from warlord.unit import Unit
         self.unit = Unit()
 
-    def test_default_team(self):
-        self.assertEqual(self.unit.team, 0)
-
     def test_default_tile_types(self):
         self.assertTrue(self.unit.tile is None)
 

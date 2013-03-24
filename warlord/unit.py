@@ -11,7 +11,6 @@ class Unit(HasStats, HasEffects):
     def __init__(self):
         super(Unit, self).__init__()
         self.tile = None
-        self.team = 0
         self.level = 1
         self.experience = 0
         self.inventory = []
