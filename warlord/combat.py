@@ -44,6 +44,20 @@ def does_combat_continue(units, attack_counts):
     return (any([c > 0 for c in attack_counts]) and
             all([u.health > 0 for u in units]))
 
+def calculate_damage(unitA, unitB):
+    if unitA.equipped_item.type == 'magical':
+        return calculate_magical_damage(unitA, unitB)
+    elif unitA.equipped_item.type == 'physical':
+        return calculate_physical_damage(unitA, unitB)
+
+def calculate_physical_damage(unitA, unitB):
+    return max(calculate_physical_attack_power(unitA, unitB) - unitB.defense,
+            0)
+
+def calculate_magical_damage(unitA, unitB):
+    return max(calculate_magical_attack_power(unitA, unitB) - unitB.resistance,
+            0)
+
 def calculate_attack_power(unitA, unitB):
     if unitA.equipped_item.type == 'magical':
         return calculate_magical_attack_power(unitA, unitB)
@@ -66,17 +80,3 @@ def calculate_physical_attack_power(unitA, unitB):
 
 def base_attack_power(atk_stat, might, weapon_counter, unit_counter):
     return atk_stat + (might + weapon_counter) * (unit_counter + 1)
-
-def calculate_damage(unitA, unitB):
-    if unitA.equipped_item.type == 'magical':
-        return calculate_magical_damage(unitA, unitB)
-    elif unitA.equipped_item.type == 'physical':
-        return calculate_physical_damage(unitA, unitB)
-
-def calculate_physical_damage(unitA, unitB):
-    return max(calculate_physical_attack_power(unitA, unitB) - unitB.defense,
-            0)
-
-def calculate_magical_damage(unitA, unitB):
-    return max(calculate_magical_attack_power(unitA, unitB) - unitB.resistance,
-            0)
