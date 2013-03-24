@@ -30,7 +30,7 @@ class StatChangingMixin(IsUsableMixin):
         super(StatChangingMixin, self).__init__()
 
     def use(self, target, *args, **kwargs):
-        for stat_key, diff in self.stats.items():
-            cur_value = getattr(target, stat_key)
-            setattr(target, stat_key, cur_value + diff)
+        for stat, modifier in self.stats.items():
+            cur_value = getattr(target, stat)
+            setattr(target, stat, cur_value + modifier)
         super(StatChangingMixin, self).use(target, *args, **kwargs)
