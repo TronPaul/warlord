@@ -122,34 +122,55 @@ class TestCombat(TestCase):
         calculate_damage(unitA, unitB)
         calc_phys_dmg.assert_called_once_with(unitA, unitB)
 
-    def test_attack_count_vs_unit_with_same_speed(self):
+    def test_attack_count_when_no_item(self):
+        from warlord.combat import calculate_attack_count
+        unit = Mock()
+        unit.equipped_item = None
+        self.assertEquals(calculate_attack_count(unit, unit), 0)
+
+    @patch('warlord.combat.is_in_range')
+    def test_attack_count_when_out_of_range(self, is_in_rng):
+        from warlord.combat import calculate_attack_count
+        unit = Mock()
+        is_in_rng.return_value = False
+        self.assertEquals(calculate_attack_count(unit, unit), 0)
+
+    @patch('warlord.combat.is_in_range')
+    def test_attack_count_vs_unit_with_same_speed(self, is_in_rng):
         from warlord.combat import calculate_attack_count
         unit = Mock()
         unit.speed = 1
+        is_in_rng.return_value = True
         self.assertEqual(calculate_attack_count(unit, unit), 1)
 
-    def test_attack_count_vs_unit_with_3_less_speed(self):
+    @patch('warlord.combat.is_in_range')
+    def test_attack_count_vs_unit_with_3_less_speed(self, is_in_rng):
         from warlord.combat import calculate_attack_count
         unitA = Mock()
         unitB = Mock()
         unitA.speed = 3
         unitB.speed = 0
+        is_in_rng.return_value = True
         self.assertEqual(calculate_attack_count(unitA, unitB), 1)
 
-    def test_attack_count_vs_unit_with_4_less_speed(self):
+    @patch('warlord.combat.is_in_range')
+    def test_attack_count_vs_unit_with_4_less_speed(self, is_in_rng):
         from warlord.combat import calculate_attack_count
         unitA = Mock()
         unitB = Mock()
         unitA.speed = 4
         unitB.speed = 0
+        is_in_rng.return_value = True
         self.assertEqual(calculate_attack_count(unitA, unitB), 2)
 
-    def test_attack_count_vs_unit_with_5_less_speed(self):
+    @patch('warlord.combat.is_in_range')
+    def test_attack_count_vs_unit_with_5_less_speed(self, is_in_rng):
         from warlord.combat import calculate_attack_count
         unitA = Mock()
         unitB = Mock()
         unitA.speed = 5
         unitB.speed = 0
+        is_in_rng.return_value = True
         self.assertEqual(calculate_attack_count(unitA, unitB), 2)
 
     def test_combat_raises_out_of_range_when_not_in_range(self):

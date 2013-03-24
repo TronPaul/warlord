@@ -20,6 +20,8 @@ def get_attack_counts(unitA, unitB):
              calculate_attack_count(unitB, unitA)]
 
 def calculate_attack_count(unitA, unitB):
+    if unitA.equipped_item is None or not is_in_range(unitA, unitB):
+        return 0
     dif = unitA.speed - unitB.speed
     return 2 if dif > 3 else 1
 
