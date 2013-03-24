@@ -22,6 +22,7 @@ def do_combat_round(units, attack_counts):
     defender = units[1]
     defender.health -= calculate_damage(attacker, defender)
     attack_counts[0] -= 1
+    attacker.equipped_item.uses -= 1
 
 def is_in_range(unitA, unitB):
     dist = distance(unitA.tile, unitB.tile) - 1

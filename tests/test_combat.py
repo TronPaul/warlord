@@ -178,6 +178,8 @@ class TestCombat(TestCase):
         unitB = Mock()
         unitA.health = 99
         unitB.health = 99
+        unitA.equipped_item.uses = 99
+        unitB.equipped_item.uses = 99
         calc_atk_cnt.return_value = 1
         calc_dmg.return_value = 1
         in_rng.return_value = True
@@ -211,6 +213,8 @@ class TestCombat(TestCase):
         unitB = Mock()
         unitA.health = 99
         unitB.health = 1
+        unitA.equipped_item.uses = 99
+        unitB.equipped_item.uses = 99
         calc_atk_cnt.return_value = 1
         calc_dmg.return_value = 1
         in_rng.return_value = True
