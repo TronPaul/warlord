@@ -53,6 +53,7 @@ class Unit(HasStats):
 
     def add_item(self, item):
         self.inventory.append(item)
+        item.owner = self
 
     def remove_item(self, item):
         self.inventory.remove(item)

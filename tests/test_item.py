@@ -12,6 +12,9 @@ class TestItem(TestCase):
     def test_default_name(self):
         self.assertEqual(self.item.name, '')
 
+    def test_default_owner(self):
+        self.assertTrue(self.item.owner is None)
+
 class TestLimitedUsesMixin(TestCase):
     def setUp(self):
         from warlord.item import Item, LimitedUsesMixin
@@ -26,6 +29,11 @@ class TestLimitedUsesMixin(TestCase):
         self.item.uses = 1
         self.item.use()
         self.assertEquals(self.item.uses, 0)
+
+    def test_use_with_no_uses_raises_error(self):
+        from warlord.item import ItemOutOfUsesError
+        self.item.uses = 0
+        self.assertRaises(ItemOutOfUsesError, self.item.use)
 
 class TestStatChangingMixin(TestCase):
     def setUp(self):

@@ -1,4 +1,5 @@
 from warlord.path import distance
+from warlord.item import ItemOutOfUsesError
 
 class UnitOutOfRangeError(ValueError):
     pass
@@ -9,6 +10,18 @@ def combat(unitA, unitB):
     units = [unitA, unitB]
     attack_counts = get_attack_counts(unitA, unitB)
     do_combat_loop(units, attack_counts)
+
+def is_in_range(unitA, unitB):
+    dist = distance(unitA.tile, unitB.tile) - 1
+    return dist in unitA.equipped_item.attack_range
+
+def get_attack_counts(unitA, unitB):
+    return [calculate_attack_count(unitA, unitB),
+             calculate_attack_count(unitB, unitA)]
+
+def calculate_attack_count(unitA, unitB):
+    dif = unitA.speed - unitB.speed
+    return 2 if dif > 3 else 1
 
 def do_combat_loop(units, attack_counts):
     while does_combat_continue(units, attack_counts):
@@ -24,19 +37,7 @@ def do_combat_round(units, attack_counts):
     defender = units[1]
     defender.health -= calculate_damage(attacker, defender)
     attack_counts[0] -= 1
-    attacker.equipped_item.uses -= 1
-
-def is_in_range(unitA, unitB):
-    dist = distance(unitA.tile, unitB.tile) - 1
-    return dist in unitA.equipped_item.attack_range
-
-def get_attack_counts(unitA, unitB):
-    return [calculate_attack_count(unitA, unitB),
-             calculate_attack_count(unitB, unitA)]
-
-def calculate_attack_count(unitA, unitB):
-    dif = unitA.speed - unitB.speed
-    return 2 if dif > 3 else 1
+    attacker.equipped_item.use()
 
 def does_combat_continue(units, attack_counts):
     return (any([c > 0 for c in attack_counts]) and

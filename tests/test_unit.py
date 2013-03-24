@@ -115,6 +115,7 @@ class TestUnit(TestCase):
         self.unit.add_item(item)
         self.assertEqual(len(self.unit.inventory), 1)
         self.assertEqual(self.unit.inventory[0], item)
+        self.assertEqual(item.owner, self.unit)
 
     def test_remove_item(self):
         item = Mock()

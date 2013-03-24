@@ -1,7 +1,11 @@
+class ItemOutOfUsesError(ValueError):
+    pass
+
 class Item(object):
     def __init__(self):
         self.name = ''
         self.value = 0
+        self.owner = None
         self.equipable = False
         super(Item, self).__init__()
 
@@ -15,6 +19,8 @@ class LimitedUsesMixin(IsUsableMixin):
         super(LimitedUsesMixin, self).__init__()
 
     def use(self, *args, **kwargs):
+        if self.uses < 1:
+            raise ItemOutOfUsesError
         self.uses -= 1
         super(LimitedUsesMixin, self).use(*args, **kwargs)
 
