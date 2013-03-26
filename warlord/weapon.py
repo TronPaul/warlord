@@ -1,4 +1,4 @@
-from item import Item, LimitedUsesMixin
+from item import Item, LimitedUseMixin
 from combat import calculate_damage
 
 class EquipableItem(Item):
@@ -9,7 +9,7 @@ class EquipableItem(Item):
         self.might = 0
         self.equipable = True
 
-class Staff(LimitedUsesMixin, EquipableItem):
+class Staff(LimitedUseMixin, EquipableItem):
     def __init__(self):
         super(Staff, self).__init__()
         self.base_healing = 0
@@ -23,7 +23,7 @@ class Staff(LimitedUsesMixin, EquipableItem):
         super(Staff, self).use(target)
         target.health += self.healing_amount
 
-class Weapon(LimitedUsesMixin, EquipableItem):
+class Weapon(LimitedUseMixin, EquipableItem):
     def __init__(self):
         super(Weapon, self).__init__()
         self.attack_range = []

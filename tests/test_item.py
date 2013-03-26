@@ -17,8 +17,8 @@ class TestItem(TestCase):
 
 class TestLimitedUsesMixin(TestCase):
     def setUp(self):
-        from warlord.item import Item, LimitedUsesMixin
-        class LimitedUseItem(LimitedUsesMixin, Item):
+        from warlord.item import Item, LimitedUseMixin
+        class LimitedUseItem(LimitedUseMixin, Item):
             pass
         self.item = LimitedUseItem()
 

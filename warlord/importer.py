@@ -56,3 +56,42 @@ def import_unit(unit_defn):
             raise BadUnitAttributeError
         setattr(unit, attr, val)
     return unit
+
+def import_item(item_defn):
+    from warlord.item import (LimitedUseMixin, StatChangingMixin,
+        LimitedUseStatChangingItem, Item)
+    _type = item_defn.get('type', 'item')
+    item_types = {
+        'item': Item,
+        'limited_use_stat_changing': LimitedUseStatChangingItem
+    }
+    if _type not in item_types:
+        raise TypeError
+    item = item_types[_type]()
+    if isinstance(item, LimitedUseMixin):
+        print True
+        item = config_limited_use_item(item, item_defn)
+    if isinstance(item, StatChangingMixin):
+        item = config_stat_changing_item(item, item_defn)
+    if isinstance(item, Item):
+        item = config_simple_item(item, item_defn)
+    return item
+
+def config_stat_changing_item(item, item_defn):
+    if 'stats' in item_defn:
+        item.stats = item_defn['stats']
+    return item
+
+def config_limited_use_item(item, item_defn):
+    if 'uses' in item_defn:
+        item.uses = item_defn['uses']
+    return item
+
+def config_simple_item(item, item_defn):
+    from warlord.item import Item
+    item = Item()
+    if 'name' in item_defn:
+        item.name = item_defn['name']
+    if 'value' in item_defn:
+        item.value = item_defn['value']
+    return item

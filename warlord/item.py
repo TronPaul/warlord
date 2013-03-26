@@ -2,27 +2,27 @@ class ItemOutOfUsesError(ValueError):
     pass
 
 class Item(object):
+    equipable = False
     def __init__(self):
         self.name = ''
         self.value = 0
         self.owner = None
-        self.equipable = False
         super(Item, self).__init__()
 
 class IsUsableMixin(object):
     def use(self, *args, **kwargs):
         pass
 
-class LimitedUsesMixin(IsUsableMixin):
+class LimitedUseMixin(IsUsableMixin):
     def __init__(self):
         self.uses = 0
-        super(LimitedUsesMixin, self).__init__()
+        super(LimitedUseMixin, self).__init__()
 
     def use(self, *args, **kwargs):
         if self.uses < 1:
             raise ItemOutOfUsesError
+        super(LimitedUseMixin, self).use(*args, **kwargs)
         self.uses -= 1
-        super(LimitedUsesMixin, self).use(*args, **kwargs)
 
 class StatChangingMixin(IsUsableMixin):
     def __init__(self):
@@ -34,3 +34,6 @@ class StatChangingMixin(IsUsableMixin):
             cur_value = getattr(target, stat)
             setattr(target, stat, cur_value + modifier)
         super(StatChangingMixin, self).use(target, *args, **kwargs)
+
+class LimitedUseStatChangingItem(LimitedUseMixin, StatChangingMixin, Item):
+    pass

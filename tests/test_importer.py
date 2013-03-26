@@ -66,16 +66,42 @@ class TestImporter(TestCase):
         from warlord.importer import import_tile_factory
         tile_defn = {
             'type':'plains'
-            }
+        }
         tile_factory = import_tile_factory(tile_defn)
         tile = tile_factory()
         self.assertEquals(tile.type, 'plains')
 
     def test_import_simple_item(self):
-        pass
+        from warlord.importer import import_item
+        item_defn = {
+            'name':'test_item',
+            'value':100
+        }
+        item = import_item(item_defn)
+        self.assertEquals(item.name, 'test_item')
+        self.assertEquals(item.value, 100)
 
     def test_import_potion(self):
-        pass
+        from warlord.importer import import_item
+        from warlord.item import LimitedUseMixin, StatChangingMixin, Item
+        item_defn = {
+            'type':'limited_use_stat_changing',
+            'name':'Potion',
+            'value':30,
+            'uses':3,
+            'stats':{
+                'health':10
+            }
+        }
+        item = import_item(item_defn)
+        self.assertTrue(isinstance(item, LimitedUseMixin))
+        self.assertTrue(isinstance(item, StatChangingMixin))
+        self.assertTrue(isinstance(item, Item))
+        self.assertEquals(item.name, 'Potion')
+        self.assertEquals(item.value, 30)
+        self.assertEquals(item.uses, 3)
+        self.assertEquals(len(item.stats), 1)
+        self.assertEquals(item.stats['health'], 10)
 
     def test_import_simple_weapon(self):
         pass
