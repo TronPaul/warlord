@@ -69,29 +69,24 @@ def import_item(item_defn):
         raise TypeError
     item = item_types[_type]()
     if isinstance(item, LimitedUseMixin):
-        print True
-        item = config_limited_use_item(item, item_defn)
+        config_limited_use_item(item, item_defn)
     if isinstance(item, StatChangingMixin):
-        item = config_stat_changing_item(item, item_defn)
+        config_stat_changing_item(item, item_defn)
     if isinstance(item, Item):
-        item = config_simple_item(item, item_defn)
+        config_simple_item(item, item_defn)
     return item
 
 def config_stat_changing_item(item, item_defn):
     if 'stats' in item_defn:
         item.stats = item_defn['stats']
-    return item
 
 def config_limited_use_item(item, item_defn):
     if 'uses' in item_defn:
         item.uses = item_defn['uses']
-    return item
 
 def config_simple_item(item, item_defn):
     from warlord.item import Item
-    item = Item()
     if 'name' in item_defn:
         item.name = item_defn['name']
     if 'value' in item_defn:
         item.value = item_defn['value']
-    return item
