@@ -85,7 +85,7 @@ class TestImporter(TestCase):
         from warlord.importer import import_item
         from warlord.item import LimitedUseMixin, StatChangingMixin, Item
         item_defn = {
-            'type':'limited_use_stat_changing',
+            'item_type':'limited_use_stat_changing',
             'name':'Potion',
             'value':30,
             'uses':3,
@@ -104,7 +104,36 @@ class TestImporter(TestCase):
         self.assertEquals(item.stats['health'], 10)
 
     def test_import_simple_weapon(self):
-        pass
+        from warlord.importer import import_item
+        from warlord.weapon import Weapon
+        item_defn = {
+                'item_type':'weapon',
+                'might':1,
+                'weight':10,
+                'name':'Stabby',
+                'value':1000,
+                'attack_range':[0],
+                'countered_weapon_types':['axe'],
+                'countered_by_weapon_types':['lance'],
+                'countered_unit_types':['wyvern'],
+                'countered_by_unit_types':['pony'],
+                'type':'sword',
+                'uses':30
+        }
+        item = import_item(item_defn)
+        self.assertTrue(isinstance(item, Weapon))
+        self.assertEquals(item.name, 'Stabby')
+        self.assertEquals(item.value, 1000)
+        self.assertEquals(item.uses, 30)
+        self.assertEquals(item.might, 1)
+        self.assertEquals(item.weight, 10)
+        self.assertEquals(item.type, 'sword')
+        self.assertEquals(item.attack_range, [0])
+        self.assertEquals(item.countered_weapon_types, ['axe'])
+        self.assertEquals(item.countered_by_weapon_types,
+                ['lance'])
+        self.assertEquals(item.countered_unit_types, ['wyvern'])
+        self.assertEquals(item.countered_by_unit_types, ['pony'])
 
     def test_import_simple_unit(self):
         from warlord.importer import import_unit

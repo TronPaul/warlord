@@ -27,6 +27,7 @@ class Weapon(LimitedUseMixin, EquipableItem):
     def __init__(self):
         super(Weapon, self).__init__()
         self.attack_range = []
+        self.type = None
 
         self.countered_weapon_types = []
         self.countered_by_weapon_types = []
